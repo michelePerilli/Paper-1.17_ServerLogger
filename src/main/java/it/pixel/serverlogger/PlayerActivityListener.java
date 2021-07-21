@@ -32,13 +32,13 @@ public class PlayerActivityListener implements Listener {
         Date date = new Date();
         String line = name + " " + formatter.format(date);
 
-        if(isJoin){
+        if (isJoin) {
             line += " " + ": Logged in";
         } else {
             line += " " + ": Logged out";
         }
 
-        File file = new File("log");
+        File file = new File("server.log");
         FileWriter fr = new FileWriter(file, true);
         BufferedWriter br = new BufferedWriter(fr);
         PrintWriter writer = new PrintWriter(br);
