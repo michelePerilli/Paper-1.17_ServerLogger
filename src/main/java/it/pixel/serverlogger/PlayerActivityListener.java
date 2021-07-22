@@ -20,7 +20,7 @@ public class PlayerActivityListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerQuitEvent event) throws IOException {
+    public void onPlayerQuit(PlayerQuitEvent event) throws IOException {
         Player player = event.getPlayer();
         log(player.getName(), false);
 
