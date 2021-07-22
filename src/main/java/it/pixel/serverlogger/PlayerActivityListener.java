@@ -6,44 +6,33 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class PlayerActivityListener extends AbstractLogger implements Listener {
 
-public class PlayerActivityListener implements Listener {
+
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        log(player.getName(), true);
-
+        saveLog(player.getName(), true);
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) throws IOException {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        log(player.getName(), false);
-
+        saveLog(player.getName(), false);
     }
 
-
-    private void log(String name, Boolean isJoin) throws IOException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        String line = name + " " + formatter.format(date);
+    private void saveLog(String name, Boolean isJoin) {
+        String line = name + " " + getCurrentDate();
 
         if (isJoin) {
-            line += " " + ": Logged in";
+            line += " : Logged in";
         } else {
-            line += " " + ": Logged out";
+            line += " : Logged out";
         }
 
-        File file = new File("server.log");
-        FileWriter fr = new FileWriter(file, true);
-        BufferedWriter br = new BufferedWriter(fr);
-        PrintWriter writer = new PrintWriter(br);
-        writer.println(line);
-        writer.close();
+        log("server.log", line);
     }
+
 
 }

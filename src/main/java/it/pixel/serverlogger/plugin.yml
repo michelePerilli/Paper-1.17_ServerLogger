@@ -3,3 +3,7 @@ version: 1.0
 author: Pixel
 main: it.pixel.serverlogger.ServerLogger
 api-version: 1.17
+commands:
+  coords:
+    description: This is a log(?)
+    usage: /<command>
