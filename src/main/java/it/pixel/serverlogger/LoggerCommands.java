@@ -42,8 +42,33 @@ public class LoggerCommands extends AbstractLogger implements CommandExecutor {
                 show(player);
 
         }
+
+        if (command.getName().equalsIgnoreCase("log")) {
+
+            //********* /coords add <description> *********//
+            if (args[0].equalsIgnoreCase("show"))
+                showServerLog(player);
+
+        }
         //*********************** END COMMANDs SECTION ***********************//
         return true;
+    }
+
+    private void showServerLog(Player player) {
+        try {
+
+            File file = new File("server.log");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String row;
+            while ((row = br.readLine()) != null) {
+                    player.sendMessage(ChatColor.DARK_RED + row);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -2,7 +2,9 @@ package it.pixel.serverlogger;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public abstract class AbstractLogger {
 
@@ -34,7 +36,14 @@ public abstract class AbstractLogger {
      * @return current date
      */
     public String getCurrentDate(){
-        return new SimpleDateFormat(DATE_FORMAT).format(new Date());
+        SimpleDateFormat date = new SimpleDateFormat(DATE_FORMAT);
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Rome");
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(new Date());
+        date.setTimeZone(timeZone);
+
+        return date.format(calendar.getTime());
     }
 
 }

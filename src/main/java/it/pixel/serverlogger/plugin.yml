@@ -7,3 +7,6 @@ commands:
   coords:
     description: This is a log(?)
     usage: /<command>
+  log:
+    description: This is a log(?)
+    usage: /<command>
