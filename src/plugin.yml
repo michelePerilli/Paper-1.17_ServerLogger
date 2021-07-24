@@ -6,7 +6,7 @@ api-version: 1.17
 commands:
   coords:
     description: This is a log(?)
-    usage: /<command>
+    usage: /coords show
   log:
     description: This is a log(?)
-    usage: /<command>
+    usage: /log show
