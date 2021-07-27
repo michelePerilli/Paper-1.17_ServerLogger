@@ -18,7 +18,6 @@ public class CoordsService extends BaseService {
      * @param player    player
      */
     public static void add(String[] arguments, Player player) {
-        System.err.println("im in add");
 
         StringBuilder description = new StringBuilder();
         for (int i = 1; i < arguments.length; i++) {
@@ -26,8 +25,8 @@ public class CoordsService extends BaseService {
         }
         Location coords = player.getLocation();
         String line = String.format("%s;%d;%d;%d;%s", player.getName(), coords.getBlockX(), coords.getBlockY(), coords.getBlockZ(), description).trim();
-        System.err.println("close to end");
-        log("coords.log", line);
+        if (arguments.length > 1)
+            log("coords.log", line);
     }
 
 
@@ -39,13 +38,12 @@ public class CoordsService extends BaseService {
     public static void show(Player player) {
 
         try {
-
             File file = new File("coords.log");
             BufferedReader br = new BufferedReader(new FileReader(file));
             String row;
             while ((row = br.readLine()) != null) {
                 String[] data = row.split(";");
-                if ( data[0].equals(player.getName())) {
+                if (data[0].equals(player.getName())) {
                     String coords = String.format("%s%s%s %s %s", ChatColor.GOLD, ChatColor.BOLD, data[1], data[2], data[3]);
                     String desc = String.format("%s%s", ChatColor.GREEN, data[4]);
                     player.sendMessage(coords + ": " + desc);
