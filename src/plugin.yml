@@ -1,8 +1,8 @@
 name: ServerLogger
-version: 1.0
+version: 1.1
 author: Pixel
 main: it.pixel.serverlogger.ServerLogger
-api-version: 1.17
+api-version: 1.18
 commands:
   coords:
     description: This is a log(?)
