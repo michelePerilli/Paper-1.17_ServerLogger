@@ -17,11 +17,11 @@ public class CommandsController implements CommandExecutor {
         // Player init
         Player player = (Player) sender;
 
-        // Check for wrong args len
-        if (args.length < 1) return false;
-
         //************************* COMMANDs SECTION *************************//
         if (command.getName().equalsIgnoreCase("coords")) {
+
+            // Check for wrong args len
+            if (args.length < 1) return false;
 
             //********* /coords add <description> *********//
             if (args[0].equalsIgnoreCase("add"))
@@ -39,6 +39,9 @@ public class CommandsController implements CommandExecutor {
                 LoggingService.show(player);
 
         }
+
+        if (command.getName().equalsIgnoreCase("here"))
+            CoordsService.here(player);
         //*********************** END COMMANDs SECTION ***********************//
         return true;
     }

@@ -18,12 +18,16 @@ public class ServerLogger extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerActivityListener(), this);
         PluginCommand coordsCommand = getCommand("coords");
         PluginCommand logCommand = getCommand("log");
+        PluginCommand hereCommand = getCommand("here");
 
         if (coordsCommand != null) {
             coordsCommand.setExecutor(new CommandsController());
         }
         if (logCommand != null) {
             logCommand.setExecutor(new CommandsController());
+        }
+        if (hereCommand != null) {
+            hereCommand.setExecutor(new CommandsController());
         }
     }
 

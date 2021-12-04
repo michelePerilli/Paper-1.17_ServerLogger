@@ -1,13 +1,17 @@
 package it.pixel.serverlogger.service;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import static it.pixel.serverlogger.utils.MessageUtil.*;
 
 public class CoordsService extends BaseService {
 
@@ -55,5 +59,40 @@ public class CoordsService extends BaseService {
         }
 
     }
+
+
+    /**
+     * Show in all chat your current position
+     *
+     * @param player player
+     */
+    public static void here(Player player) {
+        Location data = player.getLocation();
+        String coords = String.format("%s%s%s %s %s", ChatColor.DARK_AQUA, ChatColor.BOLD, data.getBlockX(), data.getBlockY(), data.getBlockZ());
+        String nome = String.format("%s%s", ChatColor.DARK_PURPLE, player.getName());
+        String dimension = goldText(getDimensionName(player.getWorld().getEnvironment()));
+
+        Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(nome + greyText(" è qui: ") + dimension + whiteText("  ") + coords));
+    }
+
+
+
+    private static String getDimensionName(World.Environment env) {
+        switch (env) {
+            case NETHER: {
+                return "Nether";
+            }
+            case THE_END: {
+                return "End";
+            }
+            case NORMAL: {
+                return "Overworld";
+            }
+            default: {
+                throw new IllegalArgumentException(String.format("Unknown dim id %s", env));
+            }
+        }
+    }
+
 
 }

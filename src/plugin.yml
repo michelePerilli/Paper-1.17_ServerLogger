@@ -10,3 +10,6 @@ commands:
   log:
     description: This is a log(?)
     usage: /log show
+  here:
+    description: Show your current position to all players
+    usage: /here
