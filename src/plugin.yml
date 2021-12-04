@@ -1,15 +1,15 @@
-name: ServerLogger
+name: ServerHandbook
 version: 1.1
 author: Pixel
-main: it.pixel.serverlogger.ServerLogger
+main: it.pixel.serverhandbook.ServerHandbook
 api-version: 1.18
 commands:
   coords:
     description: This is a log(?)
-    usage: /coords show
-  log:
+    usage: /coords <params>
+  activity:
     description: This is a log(?)
-    usage: /log show
+    usage: /activity
   here:
     description: Show your current position to all players
     usage: /here
