@@ -4,9 +4,7 @@ import it.pixel.serverhandbook.model.PlayerActivity;
 import it.pixel.serverhandbook.service.BaseService;
 import org.bukkit.ChatColor;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,11 +46,8 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     protected static List<PlayerActivity> getAllActivities() throws IOException {
-        BufferedReader br = getFileReader(ACTIVITY_FILE);
-        List<String> rows = new ArrayList<>();
 
-        String row;
-        while ((row = br.readLine()) != null) rows.add(row);
+        List<String> rows = readFile(ACTIVITY_FILE);
 
         return rows
                 .stream()
