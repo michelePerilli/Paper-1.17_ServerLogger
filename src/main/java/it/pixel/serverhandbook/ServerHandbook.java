@@ -78,10 +78,10 @@ public class ServerHandbook extends JavaPlugin {
 
         folder.mkdir();
         if (!activity.exists()) {
-            new ObjectOutputStream(new FileOutputStream(ACTIVITY_FILE, true)).writeObject(new PlayerActivity("", "", ""));
+            new ObjectOutputStream(new FileOutputStream(ACTIVITY_FILE, true)).writeObject(new PlayerActivity(true, null, null, null));
         }
         if (!coordinate.exists()) {
-            new ObjectOutputStream(new FileOutputStream(COORDS_FILE, true)).writeObject(new Coordinate("header", 1, 1, 1, ""));
+            new ObjectOutputStream(new FileOutputStream(COORDS_FILE, true)).writeObject(new Coordinate(true, null, null, null, null));
         }
     }
 }

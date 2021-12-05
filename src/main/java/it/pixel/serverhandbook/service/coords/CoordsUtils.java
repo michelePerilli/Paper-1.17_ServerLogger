@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.pixel.serverhandbook.service.TextManager.textCoordinate;
-import static it.pixel.serverhandbook.service.TextManager.textDescription;
+import static it.pixel.serverhandbook.service.TextManager.*;
 
 /**
  * The type Coords utils.
@@ -50,18 +49,6 @@ public abstract class CoordsUtils extends BaseService {
      * @param z the z
      * @return the coords as string
      */
-    public static String getCoordsAsString(String x, String y, String z) {
-        return String.format("%s %s %s", x, y, z);
-    }
-
-    /**
-     * Gets coords as string.
-     *
-     * @param x the x
-     * @param y the y
-     * @param z the z
-     * @return the coords as string
-     */
     public static String getCoordsAsString(int x, int y, int z) {
         return String.format("%s %s %s", x, y, z);
     }
@@ -78,7 +65,7 @@ public abstract class CoordsUtils extends BaseService {
         return FileManager.readFile(COORDS_FILE)
                 .stream()
                 .map(s -> (Coordinate) s)
-                .filter(c -> c.playerName().equalsIgnoreCase(player.getName()))
+                .filter(c -> !c.deleted() && c.playerName().equalsIgnoreCase(player.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -95,7 +82,7 @@ public abstract class CoordsUtils extends BaseService {
         return FileManager.readFile(COORDS_FILE)
                 .stream()
                 .map(s -> (Coordinate) s)
-                .filter(c -> c.playerName().equalsIgnoreCase(player.getName()) && c.description().contains(searchKey))
+                .filter(c -> !c.deleted() && c.playerName().equalsIgnoreCase(player.getName()) && c.description().contains(searchKey))
                 .collect(Collectors.toList());
     }
 
@@ -105,9 +92,10 @@ public abstract class CoordsUtils extends BaseService {
      * @param c the c
      * @return the string
      */
-    protected static String prepareCoordinateString(Coordinate c) {
-        String coords = textCoordinate(getCoordsAsString(c.x(), c.y(), c.z()));
+    public static String prepareCoordinateString(Coordinate c) {
+        String dimension = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getDimensionName(getEnvironmentFormDimension(c.dimension())));
+        String coords = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getCoordsAsString(c.xyz().x(), c.xyz().y(), c.xyz().z()));
         String desc = textDescription(c.description());
-        return coords + ": " + desc;
+        return dimension + textInfo(" • ") + coords + textInfo(" → ") + desc;
     }
 }

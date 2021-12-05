@@ -11,5 +11,5 @@ commands:
     description: This is a log(?)
     usage: /activity
   here:
-    description: Show your current position to all players
+    description: Show your current dimension to all players
     usage: /here
