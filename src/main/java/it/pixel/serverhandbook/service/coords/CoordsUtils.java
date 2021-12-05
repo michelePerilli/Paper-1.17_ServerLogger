@@ -2,12 +2,9 @@ package it.pixel.serverhandbook.service.coords;
 
 import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.BaseService;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +22,21 @@ public abstract class CoordsUtils extends BaseService {
      * The constant PARAM_ADD.
      */
     public static final String PARAM_ADD = "add";
+
     /**
      * The constant PARAM_SHOW.
      */
     public static final String PARAM_SHOW = "show";
 
+    /**
+     * The constant PARAM_SEARCH.
+     */
+    public static final String PARAM_SEARCH = "search";
+
+    /**
+     * The constant PARAM_SHOW_TO.
+     */
+    public static final String PARAM_SHOW_TO = "showTo";
 
     /**
      * Gets coords as string.
@@ -62,17 +69,29 @@ public abstract class CoordsUtils extends BaseService {
      * @return the all coords by player
      * @throws IOException the io exception
      */
-    protected static List<Coordinate> getAllCoordsByPlayer(Player player) throws IOException {
-        BufferedReader br = getFileReader(COORDS_FILE);
-        List<String> rows = new ArrayList<>();
+    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws IOException {
 
-        String row;
-        while ((row = br.readLine()) != null) rows.add(row);
-
-        return rows
+        return readFile(COORDS_FILE)
                 .stream()
                 .map(s -> new Coordinate(s.split(";")))
                 .filter(c -> c.getPlayerName().equalsIgnoreCase(player.getName()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Find all coords by player and description list.
+     *
+     * @param player    the player
+     * @param searchKey the search key
+     * @return the list
+     * @throws IOException the io exception
+     */
+    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws IOException {
+
+        return readFile(COORDS_FILE)
+                .stream()
+                .map(s -> new Coordinate(s.split(";")))
+                .filter(c -> c.getPlayerName().equalsIgnoreCase(player.getName()) && c.getDescription().contains(searchKey))
                 .collect(Collectors.toList());
     }
 
@@ -83,8 +102,8 @@ public abstract class CoordsUtils extends BaseService {
      * @return the string
      */
     protected static String prepareCoordinateString(Coordinate c) {
-        String coords = customText(getCoordsAsString(c.getX(), c.getY(), c.getZ()), ChatColor.DARK_AQUA, ChatColor.BOLD);
-        String desc = customText(c.getDescription(), ChatColor.GREEN);
+        String coords = textCoordinate(getCoordsAsString(c.getX(), c.getY(), c.getZ()));
+        String desc = textDescription(c.getDescription());
         return coords + ": " + desc;
     }
 }

@@ -5,10 +5,7 @@ import org.bukkit.World;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +70,23 @@ public abstract class BaseService {
         writer.close();
     }
 
+    /**
+     * Read file list.
+     *
+     * @param filename the filename
+     * @return the list
+     * @throws IOException the io exception
+     */
+    protected static List<String> readFile(String filename) throws IOException {
+        BufferedReader br = getFileReader(filename);
+        List<String> rows = new ArrayList<>();
+
+        String row;
+        while ((row = br.readLine()) != null) rows.add(row);
+        br.close();
+
+        return rows;
+    }
 
     /**
      * Gets dimension name.
@@ -91,21 +105,30 @@ public abstract class BaseService {
             case NORMAL: {
                 return "Overworld";
             }
-            default: {
-                throw new IllegalArgumentException(String.format("Unknown dim id %s", env));
-            }
         }
+        return "";
     }
 
-
     /**
-     * Grey text string.
+     * Text color by dimension string.
      *
+     * @param env the env
      * @param msg the msg
      * @return the string
      */
-    protected static String greyText(String msg) {
-        return customText(msg, ChatColor.GRAY);
+    protected static String textColorByDimension(World.Environment env, String msg) {
+        switch (env) {
+            case NETHER: {
+                return customText(msg, ChatColor.DARK_RED, ChatColor.BOLD);
+            }
+            case THE_END: {
+                return customText(msg, ChatColor.DARK_GRAY, ChatColor.BOLD);
+            }
+            case NORMAL: {
+                return customText(msg, ChatColor.DARK_GREEN, ChatColor.BOLD);
+            }
+        }
+        return msg;
     }
 
     /**
@@ -117,6 +140,58 @@ public abstract class BaseService {
      */
     protected static String customText(String msg, ChatColor... chatColors) {
         return ChatColor.RESET.toString().concat(Arrays.stream(chatColors).map(ChatColor::toString).collect(Collectors.joining(""))).concat(msg);
+    }
+
+    /**
+     * Text name string.
+     *
+     * @param name the name
+     * @return the string
+     */
+    protected static String textName(String name) {
+        return customText(name, ChatColor.DARK_PURPLE, ChatColor.BOLD);
+    }
+
+    /**
+     * Text coordinate string.
+     *
+     * @param coordinate the coordinate
+     * @return the string
+     */
+    protected static String textCoordinate(String coordinate) {
+        return customText(coordinate, ChatColor.DARK_AQUA, ChatColor.BOLD);
+    }
+
+    /**
+     * Text info string.
+     *
+     * @param msg the msg
+     * @return the string
+     */
+    protected static String textInfo(String msg) {
+        return customText(msg, ChatColor.GRAY);
+    }
+
+    /**
+     * Text descrizione string.
+     *
+     * @param msg the msg
+     * @return the string
+     */
+    protected static String textDescription(String msg) {
+        return customText(msg, ChatColor.GOLD);
+    }
+
+    /**
+     * Get parameters list.
+     *
+     * @param arguments the arguments
+     * @return the list
+     */
+    protected static List<String> getParameters(String[] arguments) {
+        List<String> params = new ArrayList<>(Arrays.asList(arguments));
+        params.remove(0);
+        return params;
     }
 
 }

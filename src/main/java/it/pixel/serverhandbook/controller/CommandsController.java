@@ -1,8 +1,8 @@
 package it.pixel.serverhandbook.controller;
 
+import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
-import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,6 +46,12 @@ public class CommandsController implements CommandExecutor {
 
                 if (args[0].equalsIgnoreCase(PARAM_SHOW))
                     CoordsCommand.show(player);
+
+                if (args[0].equalsIgnoreCase(PARAM_SEARCH))
+                    CoordsCommand.search(args, player);
+
+                if (args[0].equalsIgnoreCase(PARAM_SHOW_TO))
+                    CoordsCommand.showTo(args, player);
 
             }
 

@@ -1,10 +1,11 @@
 package it.pixel.serverhandbook.service.activity;
 
-import it.pixel.serverhandbook.model.PlayerActivity;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Logging service.
@@ -19,9 +20,11 @@ public class ActivityCommand extends ActivityUtils {
      */
     public static void show(Player player) throws IOException {
 
-        List<PlayerActivity> coords = getAllActivities();
-
-        coords.forEach(c -> player.sendMessage(prepareActivityString(c)));
+        List<String> messages = new ArrayList<>();
+        messages.add(" ");
+        messages.addAll(getAllActivities().stream().map(ActivityUtils::prepareActivityString).collect(Collectors.toList()));
+        messages.add(" ");
+        messages.forEach(player::sendMessage);
 
     }
 
