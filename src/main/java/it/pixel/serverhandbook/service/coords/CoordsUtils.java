@@ -2,11 +2,15 @@ package it.pixel.serverhandbook.service.coords;
 
 import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.BaseService;
+import it.pixel.serverhandbook.service.FileManager;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.pixel.serverhandbook.service.TextManager.textCoordinate;
+import static it.pixel.serverhandbook.service.TextManager.textDescription;
 
 /**
  * The type Coords utils.
@@ -16,7 +20,7 @@ public abstract class CoordsUtils extends BaseService {
     /**
      * The constant COORDS_FILE.
      */
-    protected static final String COORDS_FILE = "coords.log";
+    public static final String COORDS_FILE = "plugins/ServerHandbook/coords.dxl";
 
     /**
      * The constant PARAM_ADD.
@@ -69,12 +73,12 @@ public abstract class CoordsUtils extends BaseService {
      * @return the all coords by player
      * @throws IOException the io exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws IOException {
+    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws IOException, ClassNotFoundException {
 
-        return readFile(COORDS_FILE)
+        return FileManager.readFile(COORDS_FILE)
                 .stream()
-                .map(s -> new Coordinate(s.split(";")))
-                .filter(c -> c.getPlayerName().equalsIgnoreCase(player.getName()))
+                .map(s -> (Coordinate) s)
+                .filter(c -> c.playerName().equalsIgnoreCase(player.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -86,12 +90,12 @@ public abstract class CoordsUtils extends BaseService {
      * @return the list
      * @throws IOException the io exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws IOException {
+    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws IOException, ClassNotFoundException {
 
-        return readFile(COORDS_FILE)
+        return FileManager.readFile(COORDS_FILE)
                 .stream()
-                .map(s -> new Coordinate(s.split(";")))
-                .filter(c -> c.getPlayerName().equalsIgnoreCase(player.getName()) && c.getDescription().contains(searchKey))
+                .map(s -> (Coordinate) s)
+                .filter(c -> c.playerName().equalsIgnoreCase(player.getName()) && c.description().contains(searchKey))
                 .collect(Collectors.toList());
     }
 
@@ -102,8 +106,8 @@ public abstract class CoordsUtils extends BaseService {
      * @return the string
      */
     protected static String prepareCoordinateString(Coordinate c) {
-        String coords = textCoordinate(getCoordsAsString(c.getX(), c.getY(), c.getZ()));
-        String desc = textDescription(c.getDescription());
+        String coords = textCoordinate(getCoordsAsString(c.x(), c.y(), c.z()));
+        String desc = textDescription(c.description());
         return coords + ": " + desc;
     }
 }

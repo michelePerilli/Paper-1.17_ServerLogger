@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.pixel.serverhandbook.service.FileManager.writeLine;
+import static it.pixel.serverhandbook.service.TextManager.customText;
+import static it.pixel.serverhandbook.service.TextManager.textInfo;
+
 /**
  * The type Coords service.
  */
@@ -30,8 +34,7 @@ public class CoordsCommand extends CoordsUtils {
         String description = getParameters(arguments).stream().map(String::trim).collect(Collectors.joining(" "));
         Location coords = player.getLocation();
 
-        String line = String.format("%s;%d;%d;%d;%s", player.getName(), coords.getBlockX(), coords.getBlockY(), coords.getBlockZ(), description);
-        writeLine(COORDS_FILE, line);
+        writeLine(COORDS_FILE, new Coordinate(player.getName(), coords.getBlockX(), coords.getBlockY(), coords.getBlockZ(), description));
     }
 
 
@@ -41,7 +44,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void show(Player player) throws IOException {
+    public static void show(Player player) throws IOException, ClassNotFoundException {
         List<Coordinate> coords = findAllCoordsByPlayer(player);
 
         coords.forEach(c -> player.sendMessage(prepareCoordinateString(c)));
@@ -55,7 +58,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param player    the player
      * @throws IOException the io exception
      */
-    public static void search(String[] arguments, Player player) throws IOException {
+    public static void search(String[] arguments, Player player) throws IOException, ClassNotFoundException {
         String searchKey = getParameters(arguments).stream().map(String::trim).collect(Collectors.joining(" "));
         findAllCoordsByPlayerAndDescription(player, searchKey)
                 .forEach(c -> player.sendMessage(prepareCoordinateString(c)));
@@ -67,7 +70,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param arguments the arguments
      * @param player    the player
      */
-    public static void showTo(String[] arguments, Player player) throws IOException {
+    public static void showTo(String[] arguments, Player player) throws IOException, ClassNotFoundException {
         List<String> parameters = getParameters(arguments);
         Player target = Bukkit.getPlayer(parameters.remove(0));
 

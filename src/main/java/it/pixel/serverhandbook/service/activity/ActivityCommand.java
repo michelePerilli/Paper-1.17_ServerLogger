@@ -18,7 +18,7 @@ public class ActivityCommand extends ActivityUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void show(Player player) throws IOException {
+    public static void show(Player player) throws IOException, ClassNotFoundException {
 
         List<String> messages = new ArrayList<>();
         messages.add(" ");

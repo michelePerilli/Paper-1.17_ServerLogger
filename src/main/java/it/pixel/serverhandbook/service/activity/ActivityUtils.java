@@ -2,11 +2,15 @@ package it.pixel.serverhandbook.service.activity;
 
 import it.pixel.serverhandbook.model.PlayerActivity;
 import it.pixel.serverhandbook.service.BaseService;
+import it.pixel.serverhandbook.service.FileManager;
+import it.pixel.serverhandbook.service.TextManager;
 import org.bukkit.ChatColor;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.pixel.serverhandbook.service.FileManager.writeLine;
 
 /**
  * The type Activity utils.
@@ -16,12 +20,13 @@ public abstract class ActivityUtils extends BaseService {
     /**
      * The constant LOG_FILE.
      */
-    protected static final String ACTIVITY_FILE = "server.log";
+    public static final String ACTIVITY_FILE = "plugins/ServerHandbook/activity.dxl";
 
     /**
      * The constant JOINED.
      */
     protected static final String JOINED = "joined the game";
+
     /**
      * The constant LEFT.
      */
@@ -35,7 +40,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     public static void trackActivity(String name, Boolean isJoin) throws IOException {
-        writeLine(ACTIVITY_FILE, String.format("%s;%s;%s", getCurrentDate(), name, isJoin ? JOINED : LEFT));
+        writeLine(ACTIVITY_FILE, new PlayerActivity(getCurrentDate(), name, isJoin ? JOINED : LEFT));
     }
 
 
@@ -45,14 +50,10 @@ public abstract class ActivityUtils extends BaseService {
      * @return the all activities
      * @throws IOException the io exception
      */
-    protected static List<PlayerActivity> getAllActivities() throws IOException {
+    protected static List<PlayerActivity> getAllActivities() throws IOException, ClassNotFoundException {
 
-        List<String> rows = readFile(ACTIVITY_FILE);
+        return FileManager.readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).collect(Collectors.toList());
 
-        return rows
-                .stream()
-                .map(s -> new PlayerActivity(s.split(";")))
-                .collect(Collectors.toList());
     }
 
     /**
@@ -62,9 +63,9 @@ public abstract class ActivityUtils extends BaseService {
      * @return the string
      */
     protected static String prepareActivityString(PlayerActivity activity) {
-        String date = customText(activity.getDate(), ChatColor.RED);
-        String name = customText(activity.getPlayerName(), ChatColor.YELLOW);
-        String act = customText(activity.getActivity(), ChatColor.YELLOW);
+        String date = TextManager.customText(activity.date(), ChatColor.RED);
+        String name = TextManager.customText(activity.playerName(), ChatColor.YELLOW);
+        String act = TextManager.customText(activity.activity(), ChatColor.YELLOW);
         return date + " " + name + " " + act;
     }
 }
