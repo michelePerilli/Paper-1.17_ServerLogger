@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static com.sun.tools.javac.util.StringUtils.toLowerCase;
 import static it.pixel.serverhandbook.ServerHandbook.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
@@ -34,14 +33,14 @@ public class CommandsController implements CommandExecutor {
 
         try {
             //************************* COMMANDs SECTION *************************//
-            switch (toLowerCase(command.getName())) {
+            switch (command.getName()) {
                 case CMD_COORDS -> {
                     if (args.length < 1)
                         args = new String[]{PARAM_SHOW};
 
-                    switch (toLowerCase(args[0])) {
+                    switch (args[0]) {
                         case PARAM_ADD -> CoordsCommand.add(player, args);
-                        case PARAM_SHOW_TO -> CoordsCommand.showTo(player, args);
+                        case PARAM_SHARE -> CoordsCommand.showTo(player, args);
                         case PARAM_SEARCH -> CoordsCommand.search(player, args);
                         default -> CoordsCommand.show(player);
                     }

@@ -1,6 +1,7 @@
 package it.pixel.serverhandbook;
 
 import it.pixel.serverhandbook.controller.CommandsController;
+import it.pixel.serverhandbook.controller.TabController;
 import it.pixel.serverhandbook.listener.PlayerActivityListener;
 import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.model.PlayerActivity;
@@ -28,7 +29,7 @@ public class ServerHandbook extends JavaPlugin {
     /**
      * The constant CMD_COORDS.
      */
-    public static final String CMD_COORDS = "book";
+    public static final String CMD_COORDS = "coords";
     /**
      * The constant CMD_ACTIVITY.
      */
@@ -63,9 +64,12 @@ public class ServerHandbook extends JavaPlugin {
                 getCommand(CMD_HERE)
         );
 
-        commandList.stream().filter(Objects::nonNull).forEach(cmd -> cmd.setExecutor(new CommandsController()));
-
+        commandList.stream().filter(Objects::nonNull).forEach(cmd -> {
+            cmd.setExecutor(new CommandsController());
+            cmd.setTabCompleter(new TabController());
+        });
     }
+
 
     /**
      * Initialize files.

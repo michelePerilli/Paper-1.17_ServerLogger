@@ -34,12 +34,12 @@ public abstract class CoordsUtils extends BaseService {
     /**
      * The constant PARAM_SEARCH.
      */
-    public static final String PARAM_SEARCH = "search";
+    public static final String PARAM_SEARCH = "find";
 
     /**
      * The constant PARAM_SHOW_TO.
      */
-    public static final String PARAM_SHOW_TO = "showTo";
+    public static final String PARAM_SHARE = "share";
 
     /**
      * Gets coords as string.

@@ -4,7 +4,7 @@ author: Pixel
 main: it.pixel.serverhandbook.ServerHandbook
 api-version: 1.18
 commands:
-  book:
+  coords:
     description: This is a log(?)
     usage: /coords <params>
   activity:
