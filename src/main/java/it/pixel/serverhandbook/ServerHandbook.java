@@ -28,7 +28,7 @@ public class ServerHandbook extends JavaPlugin {
     /**
      * The constant CMD_COORDS.
      */
-    public static final String CMD_COORDS = "coords";
+    public static final String CMD_COORDS = "book";
     /**
      * The constant CMD_ACTIVITY.
      */

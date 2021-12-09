@@ -20,11 +20,11 @@ public class CoordsCommand extends CoordsUtils {
     /**
      * Add new coords log
      *
-     * @param arguments description
      * @param player    player
+     * @param arguments description
      * @throws IOException the io exception
      */
-    public static void add(String[] arguments, Player player) throws IOException {
+    public static void add(Player player, String[] arguments) throws IOException {
         if (arguments.length <= 1)
             return;
 
@@ -58,11 +58,11 @@ public class CoordsCommand extends CoordsUtils {
     /**
      * Search.
      *
-     * @param arguments the arguments
      * @param player    the player
+     * @param arguments the arguments
      * @throws IOException the io exception
      */
-    public static void search(String[] arguments, Player player) throws IOException, ClassNotFoundException {
+    public static void search(Player player, String[] arguments) throws IOException, ClassNotFoundException {
         String searchKey = String.join(" ", getParameters(arguments));
 
         List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
@@ -79,12 +79,12 @@ public class CoordsCommand extends CoordsUtils {
     /**
      * Show to.
      *
-     * @param arguments the arguments
      * @param player    the player
+     * @param arguments the arguments
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public static void showTo(String[] arguments, Player player) throws IOException, ClassNotFoundException {
+    public static void showTo(Player player, String[] arguments) throws IOException, ClassNotFoundException {
         List<String> parameters = getParameters(arguments);
         Player target = Bukkit.getPlayer(parameters.remove(0));
 
