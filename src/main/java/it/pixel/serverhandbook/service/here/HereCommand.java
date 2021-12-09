@@ -18,12 +18,19 @@ public class HereCommand extends BaseService {
      *
      * @param player player
      */
-    public static void here(Player player) {
+    public static void here(Player player, String[] arguments) {
         Location data = player.getLocation();
 
         String nome = textName(player.getName());
         String dimension = textColorByDimension(player.getWorld().getEnvironment(), getDimensionName(player.getWorld().getEnvironment()));
-        String coords = textColorByDimension(player.getWorld().getEnvironment(), CoordsUtils.getCoordsAsString(data.getBlockX(), data.getBlockY(), data.getBlockZ()));
+        String coords;
+
+        if (arguments.length > 0)
+            coords = textColorByDimension(player.getWorld().getEnvironment(), String.join(" ", arguments));
+        else {
+            coords = textColorByDimension(player.getWorld().getEnvironment(), CoordsUtils.getCoordsAsString(data.getBlockX(), data.getBlockY(), data.getBlockZ()));
+        }
+
 
         Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(nome + textInfo(" → ") + dimension + textInfo(" • ") + coords));
     }

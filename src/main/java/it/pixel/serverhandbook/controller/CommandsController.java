@@ -29,9 +29,8 @@ public class CommandsController implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // End if is sent from console
-        if (!(sender instanceof Player)) return true;
+        if (!(sender instanceof Player player)) return true;
         // Player init
-        Player player = (Player) sender;
 
         try {
             //************************* COMMANDs SECTION *************************//
@@ -60,7 +59,7 @@ public class CommandsController implements CommandExecutor {
 
 
             if (command.getName().equalsIgnoreCase(CMD_HERE))
-                HereCommand.here(player);
+                HereCommand.here(player, args);
             //*********************** END COMMANDs SECTION ***********************//
         } catch (Exception e) {
             e.printStackTrace();
