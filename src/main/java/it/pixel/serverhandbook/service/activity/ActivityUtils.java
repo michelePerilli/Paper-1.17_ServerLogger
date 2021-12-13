@@ -54,6 +54,17 @@ public abstract class ActivityUtils extends BaseService {
         return FileManager.readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted()).collect(Collectors.toList());
     }
 
+
+    /**
+     * Gets all activities.
+     *
+     * @return the all activities
+     * @throws IOException the io exception
+     */
+    protected static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws IOException, ClassNotFoundException {
+        return FileManager.readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted() && c.playerName().contains(playerName)).collect(Collectors.toList());
+    }
+
     /**
      * Prepare activity string string.
      *

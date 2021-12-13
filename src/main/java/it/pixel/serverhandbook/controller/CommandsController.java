@@ -45,7 +45,12 @@ public class CommandsController implements CommandExecutor {
                         default -> CoordsCommand.show(player);
                     }
                 }
-                case CMD_ACTIVITY -> ActivityCommand.show(player);
+                case CMD_ACTIVITY -> {
+                    if (args.length < 1)
+                        ActivityCommand.show(player);
+                    else
+                        ActivityCommand.find(player, args);
+                }
                 case CMD_HERE -> HereCommand.here(player, args);
 
                 //*********************** END COMMANDs SECTION ***********************//
