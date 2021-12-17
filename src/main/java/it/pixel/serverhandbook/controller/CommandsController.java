@@ -1,5 +1,6 @@
 package it.pixel.serverhandbook.controller;
 
+import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
@@ -9,6 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.util.List;
+
+import static it.pixel.files.FileManager.readFile;
+import static it.pixel.files.FileManager.writeLine;
 import static it.pixel.serverhandbook.ServerHandbook.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
@@ -42,6 +48,7 @@ public class CommandsController implements CommandExecutor {
                         case PARAM_ADD -> CoordsCommand.add(player, args);
                         case PARAM_SHARE -> CoordsCommand.showTo(player, args);
                         case PARAM_SEARCH -> CoordsCommand.search(player, args);
+                        case PARAM_DEL -> CoordsCommand.del(player, args);
                         default -> CoordsCommand.show(player);
                     }
                 }
@@ -52,7 +59,7 @@ public class CommandsController implements CommandExecutor {
                         ActivityCommand.find(player, args);
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
-
+                case "update" -> update();
                 //*********************** END COMMANDs SECTION ***********************//
             }
         } catch (Exception e) {
@@ -60,5 +67,17 @@ public class CommandsController implements CommandExecutor {
         }
         return true;
     }
+
+    private static void update() throws IOException, ClassNotFoundException {
+        List<Coordinate> lista = readFile(FILES_PATH + "coords.dxl")
+                .stream()
+                .map(s -> (Coordinate) s)
+                .toList();
+        for (Coordinate c : lista) {
+            writeLine(FILES_PATH + c.playerName() + ".dxl", c);
+        }
+    }
+
+
 }
 

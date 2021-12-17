@@ -3,7 +3,6 @@ package it.pixel.serverhandbook.service.here;
 import it.pixel.serverhandbook.service.BaseService;
 import it.pixel.serverhandbook.service.coords.CoordsUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import static it.pixel.serverhandbook.service.TextManager.*;
@@ -19,7 +18,6 @@ public class HereCommand extends BaseService {
      * @param player player
      */
     public static void here(Player player, String[] arguments) {
-        Location data = player.getLocation();
 
         String nome = textName(player.getName());
         String dimension = textColorByDimension(player.getWorld().getEnvironment(), getDimensionName(player.getWorld().getEnvironment()));
@@ -28,7 +26,7 @@ public class HereCommand extends BaseService {
         if (arguments.length > 0)
             coords = textColorByDimension(player.getWorld().getEnvironment(), String.join(" ", arguments));
         else {
-            coords = textColorByDimension(player.getWorld().getEnvironment(), CoordsUtils.getCoordsAsString(data.getBlockX(), data.getBlockY(), data.getBlockZ()));
+            coords = textColorByDimension(player.getWorld().getEnvironment(), CoordsUtils.getCoordsAsString(player.getLocation()));
         }
 
 

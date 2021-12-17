@@ -2,14 +2,14 @@ package it.pixel.serverhandbook.service.activity;
 
 import it.pixel.serverhandbook.model.PlayerActivity;
 import it.pixel.serverhandbook.service.BaseService;
-import it.pixel.serverhandbook.service.FileManager;
 import org.bukkit.ChatColor;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.pixel.serverhandbook.service.FileManager.writeLine;
+import static it.pixel.files.FileManager.readFile;
+import static it.pixel.files.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.customText;
 
 /**
@@ -51,7 +51,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     protected static List<PlayerActivity> getAllActivities() throws IOException, ClassNotFoundException {
-        return FileManager.readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted()).collect(Collectors.toList());
+        return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted()).collect(Collectors.toList());
     }
 
 
@@ -62,7 +62,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     protected static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws IOException, ClassNotFoundException {
-        return FileManager.readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted() && c.playerName().contains(playerName)).collect(Collectors.toList());
+        return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted() && c.playerName().contains(playerName)).collect(Collectors.toList());
     }
 
     /**

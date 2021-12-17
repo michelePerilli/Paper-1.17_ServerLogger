@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.List;
 
-import static it.pixel.serverhandbook.model.Coordinate.createVectorFromLocation;
-import static it.pixel.serverhandbook.service.FileManager.writeLine;
+import static it.pixel.files.FileManager.writeLine;
+import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
 import static it.pixel.serverhandbook.service.TextManager.textInfo;
 import static it.pixel.serverhandbook.service.TextManager.textName;
 
@@ -30,7 +30,7 @@ public class CoordsCommand extends CoordsUtils {
 
         String description = String.join(" ", getParameters(arguments));
 
-        writeLine(COORDS_FILE, new Coordinate(false, player.getName(), getDimensionFormEnvironment(player.getWorld().getEnvironment()), createVectorFromLocation(player.getLocation()), description));
+        writeLine(getFileName(player), new Coordinate(false, player.getName(), getPlayerDimension(player), getPlayerPosition(player), description));
 
         sendMessage(player, textInfo("Coordinate salvate con successo"));
     }
@@ -102,4 +102,17 @@ public class CoordsCommand extends CoordsUtils {
         sendMessage(player, textInfo("Hai condiviso con ") + textName(target.getName()) + textInfo(" delle coordinate"), coordList);
         sendMessage(target, message, coordList);
     }
+
+    public static void del(Player player, String[] args) throws IOException, ClassNotFoundException {
+        String searchKey = String.join(" ", getParameters(args));
+
+        List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
+
+        if (coords.isEmpty()) {
+            sendMessage(player, textInfo("Nessun dato da eliminare."));
+        }
+
+
+    }
+
 }

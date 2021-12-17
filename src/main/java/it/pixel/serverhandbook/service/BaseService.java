@@ -14,10 +14,17 @@ import static org.bukkit.World.Environment.*;
  */
 public abstract class BaseService {
 
+    public static final String FILES_PATH = "plugins/ServerHandbook/";
+
+
     public enum Dimension implements Serializable {
         OVERWORLD,
         NETHER,
         END
+    }
+
+    protected static String getFileName(Player player) {
+        return FILES_PATH + player.getName() + ".dxl";
     }
 
     /**
@@ -66,11 +73,11 @@ public abstract class BaseService {
     /**
      * Get environment form dimension world . environment.
      *
-     * @param environment the environment
+     * @param player the player
      * @return the world . environment
      */
-    protected static Dimension getDimensionFormEnvironment(World.Environment environment) {
-        switch (environment) {
+    protected static Dimension getPlayerDimension(Player player) {
+        switch (player.getWorld().getEnvironment()) {
             case NORMAL -> {
                 return Dimension.OVERWORLD;
             }
