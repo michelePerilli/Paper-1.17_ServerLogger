@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.pixel.files.FileManager.readFile;
-import static it.pixel.files.FileManager.writeLine;
+import static it.pixel.serverhandbook.service.FileManager.readFile;
+import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.customText;
 
 /**
@@ -50,7 +50,7 @@ public abstract class ActivityUtils extends BaseService {
      * @return the all activities
      * @throws IOException the io exception
      */
-    protected static List<PlayerActivity> getAllActivities() throws IOException, ClassNotFoundException {
+    protected static List<PlayerActivity> getAllActivities() throws Exception {
         return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted()).collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public abstract class ActivityUtils extends BaseService {
      * @return the all activities
      * @throws IOException the io exception
      */
-    protected static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws IOException, ClassNotFoundException {
+    protected static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws Exception {
         return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted() && c.playerName().contains(playerName)).collect(Collectors.toList());
     }
 

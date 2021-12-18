@@ -1,15 +1,15 @@
 package it.pixel.serverhandbook.service.coords;
 
+import it.pixel.serverhandbook.Vector3i;
 import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.BaseService;
-import it.pixel.vectors.Vector3i;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.List;
 
-import static it.pixel.files.FileManager.readFile;
+import static it.pixel.serverhandbook.service.FileManager.readFile;
 import static it.pixel.serverhandbook.service.TextManager.*;
 
 /**
@@ -71,7 +71,7 @@ public abstract class CoordsUtils extends BaseService {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws IOException, ClassNotFoundException {
+    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws Exception {
 
         return readFile(getFileName(player))
                 .stream()
@@ -89,7 +89,7 @@ public abstract class CoordsUtils extends BaseService {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws IOException, ClassNotFoundException {
+    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws Exception {
 
         return readFile(getFileName(player))
                 .stream()

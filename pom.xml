@@ -31,21 +31,9 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/michelePerilli/common-library</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>it.pixel</groupId>
-            <artifactId>common</artifactId>
-            <version>0.1.1</version>
-        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -59,5 +47,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
 </project>

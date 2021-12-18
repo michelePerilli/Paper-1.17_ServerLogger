@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.List;
 
-import static it.pixel.files.FileManager.writeLine;
 import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
+import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.textInfo;
 import static it.pixel.serverhandbook.service.TextManager.textName;
 
@@ -42,7 +42,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void show(Player player) throws IOException, ClassNotFoundException {
+    public static void show(Player player) throws Exception {
         List<Coordinate> coords = findAllCoordsByPlayer(player);
 
         if (coords.isEmpty()) {
@@ -62,7 +62,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param arguments the arguments
      * @throws IOException the io exception
      */
-    public static void search(Player player, String[] arguments) throws IOException, ClassNotFoundException {
+    public static void search(Player player, String[] arguments) throws Exception {
         String searchKey = String.join(" ", getParameters(arguments));
 
         List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
@@ -84,7 +84,7 @@ public class CoordsCommand extends CoordsUtils {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public static void showTo(Player player, String[] arguments) throws IOException, ClassNotFoundException {
+    public static void showTo(Player player, String[] arguments) throws Exception {
         List<String> parameters = getParameters(arguments);
         Player target = Bukkit.getPlayer(parameters.remove(0));
 
@@ -103,7 +103,8 @@ public class CoordsCommand extends CoordsUtils {
         sendMessage(target, message, coordList);
     }
 
-    public static void del(Player player, String[] args) throws IOException, ClassNotFoundException {
+
+    public static void del(Player player, String[] args) throws Exception {
         String searchKey = String.join(" ", getParameters(args));
 
         List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);

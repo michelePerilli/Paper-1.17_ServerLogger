@@ -16,7 +16,7 @@ public class ActivityCommand extends ActivityUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void show(Player player) throws IOException, ClassNotFoundException {
+    public static void show(Player player) throws Exception {
         sendMessage(player, getAllActivities().stream().map(ActivityUtils::prepareActivityString).toList());
     }
 
@@ -27,7 +27,7 @@ public class ActivityCommand extends ActivityUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void find(Player player, String[] args) throws IOException, ClassNotFoundException {
+    public static void find(Player player, String[] args) throws Exception {
         String searchKey = String.join(" ", Arrays.asList(args));
         sendMessage(player, getAllActivitiesByPlayer(searchKey).stream().map(ActivityUtils::prepareActivityString).toList());
     }

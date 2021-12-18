@@ -50,7 +50,8 @@ public class ServerHandbook extends JavaPlugin {
         List<PluginCommand> commandList = Arrays.asList(
                 getCommand(CMD_COORDS),
                 getCommand(CMD_ACTIVITY),
-                getCommand(CMD_HERE)
+                getCommand(CMD_HERE),
+                getCommand("fix")
         );
 
         commandList.stream().filter(Objects::nonNull).forEach(cmd -> {

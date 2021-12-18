@@ -1,6 +1,5 @@
 package it.pixel.serverhandbook.controller;
 
-import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
@@ -10,11 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.logging.Logger;
 
-import static it.pixel.files.FileManager.readFile;
-import static it.pixel.files.FileManager.writeLine;
 import static it.pixel.serverhandbook.ServerHandbook.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
@@ -22,6 +18,8 @@ import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
  * The type Commands controller.
  */
 public class CommandsController implements CommandExecutor {
+
+    private static final Logger LOGGER = Logger.getLogger(CommandsController.class.getCanonicalName());
 
     /**
      * On command boolean.
@@ -59,7 +57,12 @@ public class CommandsController implements CommandExecutor {
                         ActivityCommand.find(player, args);
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
-                case "update" -> update();
+                case "fix" -> {
+                    if (args[0].equals("pixel"))
+                        fix();
+                }
+
+
                 //*********************** END COMMANDs SECTION ***********************//
             }
         } catch (Exception e) {
@@ -68,14 +71,9 @@ public class CommandsController implements CommandExecutor {
         return true;
     }
 
-    private static void update() throws IOException, ClassNotFoundException {
-        List<Coordinate> lista = readFile(FILES_PATH + "coords.dxl")
-                .stream()
-                .map(s -> (Coordinate) s)
-                .toList();
-        for (Coordinate c : lista) {
-            writeLine(FILES_PATH + c.playerName() + ".dxl", c);
-        }
+    // TODO only debug purpose
+    private static void fix() {
+
     }
 
 

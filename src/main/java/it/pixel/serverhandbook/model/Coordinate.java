@@ -1,7 +1,7 @@
 package it.pixel.serverhandbook.model;
 
+import it.pixel.serverhandbook.Vector3i;
 import it.pixel.serverhandbook.service.BaseService;
-import it.pixel.vectors.Vector3i;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
