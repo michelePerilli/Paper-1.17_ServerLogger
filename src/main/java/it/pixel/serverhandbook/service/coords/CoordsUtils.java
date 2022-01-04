@@ -80,6 +80,23 @@ public abstract class CoordsUtils extends BaseService {
                 .toList();
     }
 
+
+    /**
+     * Gets next id.
+     *
+     * @param player the player
+     * @return the next id
+     * @throws Exception the exception
+     */
+    protected static long getNextId(Player player) throws Exception {
+        return readFile(getFileName(player))
+                .stream()
+                .map(s -> (Coordinate) s)
+                .filter(c -> !c.deleted())
+                .toList().size();
+    }
+
+
     /**
      * Find all coords by player and description list.
      *

@@ -9,11 +9,12 @@ import java.io.Serializable;
 /**
  * The type Coordinate.
  */
-public record Coordinate(boolean deleted,
+public record Coordinate(long id,
                          String playerName,
                          BaseService.Dimension dimension,
                          Vector3i xyz,
-                         String description) implements Serializable {
+                         String description,
+                         boolean deleted) implements Serializable {
 
     /**
      * Gets player position.

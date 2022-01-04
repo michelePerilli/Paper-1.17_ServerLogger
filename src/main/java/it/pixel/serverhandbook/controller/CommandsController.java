@@ -3,23 +3,25 @@ package it.pixel.serverhandbook.controller;
 import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
+import java.io.File;
+import java.io.IOException;
 
 import static it.pixel.serverhandbook.ServerHandbook.*;
+import static it.pixel.serverhandbook.service.TextManager.customText;
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.ACTIVITY_FILE;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
  * The type Commands controller.
  */
 public class CommandsController implements CommandExecutor {
-
-    private static final Logger LOGGER = Logger.getLogger(CommandsController.class.getCanonicalName());
 
     /**
      * On command boolean.
@@ -34,6 +36,14 @@ public class CommandsController implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // End if is sent from console
         if (!(sender instanceof Player player)) return false;
+
+        try {
+            initializeFiles(player);
+        } catch (IOException e) {
+            e.printStackTrace();
+            player.sendMessage(customText("Errore nell'inizializzazione dei file, contatta pixel", ChatColor.RED));
+            return false;
+        }
 
         try {
             //************************* COMMANDs SECTION *************************//
@@ -76,6 +86,22 @@ public class CommandsController implements CommandExecutor {
 
     }
 
+
+    /**
+     * Initialize files.
+     *
+     * @param player the player
+     * @throws IOException the io exception
+     */
+    private static void initializeFiles(Player player) throws IOException {
+        File workspace = new File("plugins/ServerHandbook/");
+        if (!workspace.exists()) {
+            workspace.mkdir();
+        }
+
+        new File("plugins/ServerHandbook/" + player.getName() + ".dxl").createNewFile();
+        new File(ACTIVITY_FILE).createNewFile();
+    }
 
 }
 

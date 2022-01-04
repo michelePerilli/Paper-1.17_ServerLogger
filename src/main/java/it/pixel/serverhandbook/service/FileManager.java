@@ -93,18 +93,22 @@ public class FileManager {
      * @throws IOException            the io exception
      */
     public static List<Object> readFile(String filename) throws Exception {
-        ObjectInputStream reader = getFileReader(filename);
-        List<Object> objects = new ArrayList<>();
-        boolean go = true;
-        while (go) {
-            try {
-                objects.add(reader.readObject());
-            } catch (Exception e) {
-                go = false;
+        if (!isFirstTime(filename)) {
+            ObjectInputStream reader = getFileReader(filename);
+            List<Object> objects = new ArrayList<>();
+            boolean go = true;
+            while (go) {
+                try {
+                    objects.add(reader.readObject());
+                } catch (Exception e) {
+                    go = false;
+                }
             }
+            reader.close();
+            return objects;
+        } else {
+            return new ArrayList<>();
         }
-        reader.close();
-        return objects;
     }
 
 }

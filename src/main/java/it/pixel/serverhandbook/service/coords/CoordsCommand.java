@@ -24,13 +24,13 @@ public class CoordsCommand extends CoordsUtils {
      * @param arguments description
      * @throws IOException the io exception
      */
-    public static void add(Player player, String[] arguments) throws IOException {
+    public static void add(Player player, String[] arguments) throws Exception {
         if (arguments.length <= 1)
             return;
 
         String description = String.join(" ", getParameters(arguments));
 
-        writeLine(getFileName(player), new Coordinate(false, player.getName(), getPlayerDimension(player), getPlayerPosition(player), description));
+        writeLine(getFileName(player), new Coordinate(getNextId(player), player.getName(), getPlayerDimension(player), getPlayerPosition(player), description, false));
 
         sendMessage(player, textInfo("Coordinate salvate con successo"));
     }
@@ -103,7 +103,7 @@ public class CoordsCommand extends CoordsUtils {
         sendMessage(target, message, coordList);
     }
 
-
+    // coming soon
     public static void del(Player player, String[] args) throws Exception {
         String searchKey = String.join(" ", getParameters(args));
 
@@ -111,6 +111,8 @@ public class CoordsCommand extends CoordsUtils {
 
         if (coords.isEmpty()) {
             sendMessage(player, textInfo("Nessun dato da eliminare."));
+        } else {
+            sendMessage(player, textInfo("Coming soon..."));
         }
 
 
