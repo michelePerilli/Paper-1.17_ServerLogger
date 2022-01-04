@@ -3,10 +3,13 @@ package it.pixel.serverhandbook.service;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.ACTIVITY_FILE;
 import static org.bukkit.World.Environment.*;
 
 /**
@@ -162,5 +165,21 @@ public abstract class BaseService {
         target.sendMessage(" ");
         rows.forEach(target::sendMessage);
         target.sendMessage(" ");
+    }
+
+
+    /**
+     * Initialize files.
+     *
+     * @throws IOException the io exception
+     */
+    public static void initializeFiles(String playerName) throws IOException {
+        File workspace = new File("plugins/ServerHandbook/");
+        if (!workspace.exists()) {
+            workspace.mkdir();
+        }
+
+        new File("plugins/ServerHandbook/" + playerName + ".dxl").createNewFile();
+        new File(ACTIVITY_FILE).createNewFile();
     }
 }

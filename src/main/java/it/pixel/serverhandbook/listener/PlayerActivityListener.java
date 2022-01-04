@@ -38,4 +38,5 @@ public class PlayerActivityListener implements Listener {
         ActivityCommand.trackActivity(player.getName(), false);
     }
 
+
 }

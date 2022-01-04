@@ -10,12 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 
 import static it.pixel.serverhandbook.ServerHandbook.*;
 import static it.pixel.serverhandbook.service.TextManager.customText;
-import static it.pixel.serverhandbook.service.activity.ActivityUtils.ACTIVITY_FILE;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
@@ -38,7 +36,7 @@ public class CommandsController implements CommandExecutor {
         if (!(sender instanceof Player player)) return false;
 
         try {
-            initializeFiles(player);
+            initializeFiles(player.getName());
         } catch (IOException e) {
             e.printStackTrace();
             player.sendMessage(customText("Errore nell'inizializzazione dei file, contatta pixel", ChatColor.RED));
@@ -87,21 +85,6 @@ public class CommandsController implements CommandExecutor {
     }
 
 
-    /**
-     * Initialize files.
-     *
-     * @param player the player
-     * @throws IOException the io exception
-     */
-    private static void initializeFiles(Player player) throws IOException {
-        File workspace = new File("plugins/ServerHandbook/");
-        if (!workspace.exists()) {
-            workspace.mkdir();
-        }
-
-        new File("plugins/ServerHandbook/" + player.getName() + ".dxl").createNewFile();
-        new File(ACTIVITY_FILE).createNewFile();
-    }
 
 }
 

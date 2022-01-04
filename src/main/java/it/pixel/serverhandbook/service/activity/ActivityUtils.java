@@ -40,6 +40,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     public static void trackActivity(String name, Boolean isJoin) throws IOException {
+        initializeFiles(name);
         writeLine(ACTIVITY_FILE, new PlayerActivity(false, getCurrentDate(), name, isJoin ? JOINED : LEFT));
     }
 
