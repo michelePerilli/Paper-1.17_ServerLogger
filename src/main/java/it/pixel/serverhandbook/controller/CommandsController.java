@@ -1,6 +1,7 @@
 package it.pixel.serverhandbook.controller;
 
 import it.pixel.serverhandbook.service.activity.ActivityCommand;
+import it.pixel.serverhandbook.service.book.BookCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
 import org.bukkit.ChatColor;
@@ -65,6 +66,7 @@ public class CommandsController implements CommandExecutor {
                         ActivityCommand.find(player, args);
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
+                case CMD_BOOK -> BookCommand.write(player, args);
                 case "fix" -> {
                     if (args[0].equals("pixel"))
                         fix();

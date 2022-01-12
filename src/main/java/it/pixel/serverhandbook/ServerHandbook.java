@@ -29,6 +29,10 @@ public class ServerHandbook extends JavaPlugin {
      * The constant CMD_HERE.
      */
     public static final String CMD_HERE = "here";
+    /**
+     * The constant CMD_BOOK.
+     */
+    public static final String CMD_BOOK = "book";
 
     /**
      * On load.
@@ -51,6 +55,7 @@ public class ServerHandbook extends JavaPlugin {
                 getCommand(CMD_COORDS),
                 getCommand(CMD_ACTIVITY),
                 getCommand(CMD_HERE),
+                getCommand(CMD_BOOK),
                 getCommand("fix")
         );
 
