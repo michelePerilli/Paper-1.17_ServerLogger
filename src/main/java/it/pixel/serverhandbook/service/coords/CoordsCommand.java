@@ -86,6 +86,7 @@ public class CoordsCommand extends CoordsUtils {
      */
     public static void showTo(Player player, String[] arguments) throws Exception {
         List<String> parameters = getParameters(arguments);
+
         Player target = Bukkit.getPlayer(parameters.remove(0));
 
 
@@ -99,8 +100,16 @@ public class CoordsCommand extends CoordsUtils {
 
         String message = textName(player.getName()) + textInfo(" ti ha inviato delle coordinate");
 
-        sendMessage(player, textInfo("Hai condiviso con ") + textName(target.getName()) + textInfo(" delle coordinate"), coordList);
-        sendMessage(target, message, coordList);
+        if (!target.getName().equals("all")) {
+            sendMessage(target, message, coordList);
+            sendMessage(player, textInfo("Hai condiviso con ") + textName(target.getName()) + textInfo(" delle coordinate"), coordList);
+        } else {
+            Bukkit.getOnlinePlayers().stream()
+                    .filter(p -> !p.getName().equals(player.getName()))
+                    .forEach(p -> sendMessage(p, message, coordList));
+
+            sendMessage(player, textInfo("Hai condiviso con tutti delle coordinate"), coordList);
+        }
     }
 
     // coming soon

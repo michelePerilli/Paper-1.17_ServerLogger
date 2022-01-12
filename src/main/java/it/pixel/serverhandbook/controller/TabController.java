@@ -35,7 +35,10 @@ public class TabController implements TabCompleter {
                     switch (strings[0]) {
                         case PARAM_ADD -> commands.add("<descrizione>");
                         case PARAM_SEARCH -> commands.add("<filtro>");
-                        case PARAM_SHARE -> commands.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
+                        case PARAM_SHARE -> {
+                            commands.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
+                            commands.add("all");
+                        }
                     }
                     StringUtil.copyPartialMatches(strings[1], commands, completions);
 
