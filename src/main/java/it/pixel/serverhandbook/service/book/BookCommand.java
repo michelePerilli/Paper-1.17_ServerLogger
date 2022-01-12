@@ -27,7 +27,7 @@ public class BookCommand extends BaseService {
 
         String note = String.join(" ", getParameters(args));
 
-        writeLine("notes.dxl", new Book(player.getName(), note));
+        writeLine(FILES_PATH + "notes.dxl", new Book(player.getName(), note));
 
         sendMessage(player, textInfo("Nota salvata con successo"));
     }

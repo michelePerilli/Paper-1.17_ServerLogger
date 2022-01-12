@@ -1,4 +1,6 @@
 package it.pixel.serverhandbook.model;
 
-public record Book(String playerName, String note) {
+import java.io.Serializable;
+
+public record Book(String playerName, String note) implements Serializable {
 }

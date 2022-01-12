@@ -66,7 +66,12 @@ public class CommandsController implements CommandExecutor {
                         ActivityCommand.find(player, args);
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
-                case CMD_BOOK -> BookCommand.write(player, args);
+                case CMD_BOOK -> {
+                    switch (args[0]) {
+                        case "write" -> BookCommand.write(player, args);
+                        case "read" -> BookCommand.write(player, args); //TODO read
+                    }
+                }
                 case "fix" -> {
                     if (args[0].equals("pixel"))
                         fix();
