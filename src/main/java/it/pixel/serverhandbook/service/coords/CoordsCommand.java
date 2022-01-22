@@ -84,11 +84,11 @@ public class CoordsCommand extends CoordsUtils {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public static void showTo(Player player, String[] arguments) throws Exception {
+    public static void share(Player player, String[] arguments) throws Exception {
+
         List<String> parameters = getParameters(arguments);
 
-        Player target = Bukkit.getPlayer(parameters.remove(0));
-
+        String targetName = parameters.remove(0);
 
         String searchKey = String.join(" ", parameters);
         List<String> coordList = findAllCoordsByPlayerAndDescription(player, searchKey)
@@ -96,11 +96,12 @@ public class CoordsCommand extends CoordsUtils {
                 .map(CoordsUtils::prepareCoordinateString)
                 .toList();
 
-        if (target == null || coordList.isEmpty()) return;
 
         String message = textName(player.getName()) + textInfo(" ti ha inviato delle coordinate");
 
-        if (!target.getName().equals("all")) {
+        if (!targetName.equals("all")) {
+            Player target = Bukkit.getPlayer(targetName);
+            if (target == null || coordList.isEmpty()) return;
             sendMessage(target, message, coordList);
             sendMessage(player, textInfo("Hai condiviso con ") + textName(target.getName()) + textInfo(" delle coordinate"), coordList);
         } else {

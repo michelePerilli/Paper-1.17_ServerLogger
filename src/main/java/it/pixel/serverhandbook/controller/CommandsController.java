@@ -1,7 +1,6 @@
 package it.pixel.serverhandbook.controller;
 
 import it.pixel.serverhandbook.service.activity.ActivityCommand;
-import it.pixel.serverhandbook.service.book.BookCommand;
 import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import it.pixel.serverhandbook.service.here.HereCommand;
 import org.bukkit.ChatColor;
@@ -53,7 +52,7 @@ public class CommandsController implements CommandExecutor {
 
                     switch (args[0]) {
                         case PARAM_ADD -> CoordsCommand.add(player, args);
-                        case PARAM_SHARE -> CoordsCommand.showTo(player, args);
+                        case PARAM_SHARE -> CoordsCommand.share(player, args);
                         case PARAM_SEARCH -> CoordsCommand.search(player, args);
                         case PARAM_DEL -> CoordsCommand.del(player, args);
                         default -> CoordsCommand.show(player);
@@ -66,16 +65,6 @@ public class CommandsController implements CommandExecutor {
                         ActivityCommand.find(player, args);
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
-                case CMD_BOOK -> {
-                    switch (args[0]) {
-                        case "write" -> BookCommand.write(player, args);
-                        case "read" -> BookCommand.write(player, args); //TODO read
-                    }
-                }
-                case "fix" -> {
-                    if (args[0].equals("pixel"))
-                        fix();
-                }
 
 
                 //*********************** END COMMANDs SECTION ***********************//
@@ -85,12 +74,6 @@ public class CommandsController implements CommandExecutor {
         }
         return true;
     }
-
-    // TODO only debug purpose
-    private static void fix() {
-
-    }
-
 
 
 }
