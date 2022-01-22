@@ -13,9 +13,4 @@ commands:
   here:
     description: Show your current dimension to all players
     usage: /here
-  fix:
-    description: x
-    usage: x
-  book:
-    description: x
-    usage: x
+
