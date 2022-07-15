@@ -5,12 +5,14 @@ import it.pixel.serverhandbook.service.BaseService;
 import org.bukkit.ChatColor;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static it.pixel.serverhandbook.service.FileManager.readFile;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
-import static it.pixel.serverhandbook.service.TextManager.customText;
+import static it.pixel.serverhandbook.service.TextManager.*;
 
 /**
  * The type Activity utils.
@@ -52,7 +54,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     protected static List<PlayerActivity> getAllActivities() throws Exception {
-        return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted()).collect(Collectors.toList());
+        return readFile(ACTIVITY_FILE).stream().map(PlayerActivity.class::cast).filter(c -> !c.deleted()).toList();
     }
 
 
@@ -63,7 +65,7 @@ public abstract class ActivityUtils extends BaseService {
      * @throws IOException the io exception
      */
     protected static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws Exception {
-        return readFile(ACTIVITY_FILE).stream().map(x -> (PlayerActivity) x).filter(c -> !c.deleted() && c.playerName().contains(playerName)).collect(Collectors.toList());
+        return readFile(ACTIVITY_FILE).stream().map(PlayerActivity.class::cast).filter(c -> !c.deleted() && c.playerName().contains(playerName)).toList();
     }
 
     /**
@@ -77,5 +79,32 @@ public abstract class ActivityUtils extends BaseService {
         String name = customText(activity.playerName(), ChatColor.YELLOW);
         String act = customText(activity.activity(), ChatColor.YELLOW);
         return date + " " + name + " " + act;
+    }
+
+    protected static String prepareActivityReportString(String playerName, Long time) {
+        return textName(playerName) + textInfo(" → ") + textInfo(toTime(time));
+    }
+
+
+    protected static Long simpleStringToDate(String myDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        Date date = null;
+        try {
+            date = sdf.parse(myDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+
+    protected static String toTime(Long milliseconds) {
+        int seconds = (int) (milliseconds / 1000) % 60;
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
+
+        return String.format("%02d h, %02d min, %02d sec",
+                hours,
+                minutes, seconds
+        );
     }
 }

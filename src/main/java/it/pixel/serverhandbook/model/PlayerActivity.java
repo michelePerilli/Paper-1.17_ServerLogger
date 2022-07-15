@@ -9,5 +9,4 @@ public record PlayerActivity(boolean deleted,
                              String date,
                              String playerName,
                              String activity) implements Serializable {
-
 }

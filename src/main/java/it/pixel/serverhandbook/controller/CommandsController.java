@@ -58,11 +58,15 @@ public class CommandsController implements CommandExecutor {
                         default -> CoordsCommand.show(player);
                     }
                 }
+
                 case CMD_ACTIVITY -> {
                     if (args.length < 1)
-                        ActivityCommand.show(player);
-                    else
-                        ActivityCommand.find(player, args);
+                        args = new String[]{PARAM_SHOW};
+                    switch (args[0]) {
+//                        case "find" -> ActivityCommand.find(player, args);
+                        case "report" -> ActivityCommand.stats(player);
+                        default -> ActivityCommand.show(player);
+                    }
                 }
                 case CMD_HERE -> HereCommand.here(player, args);
 
