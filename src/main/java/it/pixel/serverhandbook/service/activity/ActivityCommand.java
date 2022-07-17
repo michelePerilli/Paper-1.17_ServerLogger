@@ -66,7 +66,7 @@ public class ActivityCommand extends ActivityUtils {
 
 
             if (values.get(values.size() - 1).activity().equals(JOINED)) {
-                values.remove(0);
+                values.remove(values.size() - 1);
             }
 
             List<Long> occurrences = new ArrayList<>(values.stream().map(x -> simpleStringToDate(x.date())).toList());
