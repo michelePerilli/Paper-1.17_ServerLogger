@@ -64,11 +64,6 @@ public class ActivityCommand extends ActivityUtils {
             }
             values = new ArrayList<>(values.stream().filter(x -> !x.deleted()).toList());
 
-
-            if (values.get(values.size() - 1).activity().equals(JOINED)) {
-                values.remove(values.size() - 1);
-            }
-
             List<Long> occurrences = new ArrayList<>(values.stream().map(x -> simpleStringToDate(x.date())).toList());
             Long lastLogIn = null;
             if (occurrences.size() % 2 == 1) {
