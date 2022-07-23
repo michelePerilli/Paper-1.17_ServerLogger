@@ -1,5 +1,7 @@
 package it.pixel.serverhandbook.controller;
 
+import it.pixel.serverhandbook.service.activity.ActivityCommand;
+import it.pixel.serverhandbook.service.coords.CoordsCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,11 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static it.pixel.serverhandbook.ServerHandbook.CMD_ACTIVITY;
-import static it.pixel.serverhandbook.ServerHandbook.CMD_COORDS;
-import static it.pixel.serverhandbook.service.activity.ActivityUtils.PARAM_FIND;
-import static it.pixel.serverhandbook.service.activity.ActivityUtils.PARAM_REPORT;
-import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
  * The type Tab controller.
@@ -37,50 +34,61 @@ public class TabController implements TabCompleter {
         List<String> completions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        if (command.getName().equals(CMD_ACTIVITY)) {
-            switch (strings.length) {
-                case 1 -> {
-                    commands.add(PARAM_REPORT);
-                    commands.add(PARAM_FIND);
-                    StringUtil.copyPartialMatches(strings[0], commands, completions);
-                }
-                case 2 -> {
-                    switch (strings[0]) {
-                        case PARAM_FIND -> commands.add("<player>");
+        switch (CommandsController.Commands.valueOf(command.getName().toUpperCase())) {
+            case ACTIVITY -> {
+                switch (strings.length) {
+                    case 1 -> {
+                        commands.add(ActivityCommand.ActivityParams.REPORT.getParam());
+                        commands.add(ActivityCommand.ActivityParams.FIND.getParam());
+                        commands.add(ActivityCommand.ActivityParams.SHOW.getParam());
+                        StringUtil.copyPartialMatches(strings[0], commands, completions);
                     }
-                    StringUtil.copyPartialMatches(strings[1], commands, completions);
+                    case 2 -> {
+                        if (strings[0].equalsIgnoreCase(ActivityCommand.ActivityParams.FIND.getParam()))
+                            commands.add("<player>");
+                        StringUtil.copyPartialMatches(strings[1], commands, completions);
+                    }
+                    default -> {
+                    }
                 }
             }
-        }
-
-        if (command.getName().equals(CMD_COORDS)) {
-            switch (strings.length) {
-                case 1 -> {
-                    commands.add(PARAM_SHARE);
-                    commands.add(PARAM_ADD);
-                    commands.add(PARAM_SEARCH);
-                    commands.add(PARAM_SHOW);
-                    commands.add(PARAM_DEL);
-                    StringUtil.copyPartialMatches(strings[0], commands, completions);
-                }
-                case 2 -> {
-                    switch (strings[0]) {
-                        case PARAM_ADD -> commands.add("<descrizione>");
-                        case PARAM_SEARCH -> commands.add("<filtro>");
-                        case PARAM_DEL -> commands.add("<id>");
-                        case PARAM_SHARE -> {
-                            commands.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
-                            commands.add("all");
+            case COORDS -> {
+                switch (strings.length) {
+                    case 1 -> {
+                        commands.add(CoordsCommand.CoordsParams.SHARE.getParam());
+                        commands.add(CoordsCommand.CoordsParams.ADD.getParam());
+                        commands.add(CoordsCommand.CoordsParams.FIND.getParam());
+                        commands.add(CoordsCommand.CoordsParams.SHOW.getParam());
+                        commands.add(CoordsCommand.CoordsParams.DEL.getParam());
+                        StringUtil.copyPartialMatches(strings[0], commands, completions);
+                    }
+                    case 2 -> {
+                        switch (CoordsCommand.CoordsParams.parseParam(strings[0])) {
+                            case ADD -> commands.add("<descrizione>");
+                            case FIND -> commands.add("<filtro>");
+                            case DEL -> commands.add("<id>");
+                            case SHARE -> {
+                                commands.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
+                                commands.add("all");
+                            }
+                            case SHOW -> {
+                            }
                         }
-                    }
-                    StringUtil.copyPartialMatches(strings[1], commands, completions);
+                        StringUtil.copyPartialMatches(strings[1], commands, completions);
 
-                }
-                case 3 -> {
-                    if (strings[0].equals(PARAM_SHARE)) commands.add("<filtro>");
-                    StringUtil.copyPartialMatches(strings[2], commands, completions);
+                    }
+                    case 3 -> {
+                        if (strings[0].equals(CoordsCommand.CoordsParams.SHARE.getParam()))
+                            commands.add("<filtro>");
+                        StringUtil.copyPartialMatches(strings[2], commands, completions);
+                    }
+                    default -> {
+                    }
                 }
             }
+            case HERE -> {
+            }
+
         }
 
         Collections.sort(completions);

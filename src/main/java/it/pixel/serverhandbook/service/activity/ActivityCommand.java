@@ -1,6 +1,7 @@
 package it.pixel.serverhandbook.service.activity;
 
 import it.pixel.serverhandbook.model.PlayerActivity;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,24 @@ import static it.pixel.serverhandbook.service.activity.ActivityUtils.*;
  * The type Logging service.
  */
 public interface ActivityCommand {
+    @Getter
+    enum ActivityParams {
+        SHOW("show"), FIND("find"), REPORT("report");
+        private final String param;
+
+        ActivityParams(String param) {
+            this.param = param;
+        }
+
+
+        public static ActivityParams parseParam(String value) {
+            try {
+                return ActivityParams.valueOf(value.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ActivityParams.SHOW;
+            }
+        }
+    }
 
     /**
      * Show server log list

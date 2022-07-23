@@ -19,19 +19,12 @@ import static it.pixel.serverhandbook.service.TextManager.*;
  */
 public interface ActivityUtils {
 
+
     /**
      * The constant LOG_FILE.
      */
     String ACTIVITY_FILE = "plugins/ServerHandbook/activity.dxl";
 
-    /**
-     * The constant PARAM_REPORT.
-     */
-    String PARAM_REPORT = "report";
-    /**
-     * The constant PARAM_FIND.
-     */
-    String PARAM_FIND = "find";
     /**
      * The constant JOINED.
      */

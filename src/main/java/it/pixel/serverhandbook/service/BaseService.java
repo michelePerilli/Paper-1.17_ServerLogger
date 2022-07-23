@@ -17,10 +17,10 @@ import static org.bukkit.World.Environment.*;
  */
 public interface BaseService {
 
-    public static final String FILES_PATH = "plugins/ServerHandbook/";
+    String FILES_PATH = "plugins/ServerHandbook/";
 
 
-    public enum Dimension implements Serializable {
+    enum Dimension implements Serializable {
         OVERWORLD,
         NETHER,
         END
@@ -59,18 +59,11 @@ public interface BaseService {
      * @return the world . environment
      */
     static World.Environment getEnvironmentFormDimension(Dimension dimension) {
-        switch (dimension) {
-            case OVERWORLD -> {
-                return NORMAL;
-            }
-            case NETHER -> {
-                return NETHER;
-            }
-            case END -> {
-                return THE_END;
-            }
-        }
-        return CUSTOM;
+        return switch (dimension) {
+            case OVERWORLD -> NORMAL;
+            case NETHER -> NETHER;
+            case END -> THE_END;
+        };
     }
 
     /**
@@ -80,18 +73,12 @@ public interface BaseService {
      * @return the world . environment
      */
     static Dimension getPlayerDimension(Player player) {
-        switch (player.getWorld().getEnvironment()) {
-            case NORMAL -> {
-                return Dimension.OVERWORLD;
-            }
-            case NETHER -> {
-                return Dimension.NETHER;
-            }
-            case THE_END -> {
-                return Dimension.END;
-            }
-        }
-        return null;
+        return switch (player.getWorld().getEnvironment()) {
+            case NORMAL -> Dimension.OVERWORLD;
+            case NETHER -> Dimension.NETHER;
+            case THE_END -> Dimension.END;
+            case CUSTOM -> null;
+        };
     }
 
     /**
@@ -101,18 +88,12 @@ public interface BaseService {
      * @return the dimension name
      */
     static String getDimensionName(World.Environment env) {
-        switch (env) {
-            case NETHER -> {
-                return "Nether";
-            }
-            case THE_END -> {
-                return "End";
-            }
-            case NORMAL -> {
-                return "Overworld";
-            }
-        }
-        return "";
+        return switch (env) {
+            case NETHER -> "Nether";
+            case THE_END -> "End";
+            case NORMAL -> "Overworld";
+            case CUSTOM -> "";
+        };
     }
 
 
@@ -174,12 +155,19 @@ public interface BaseService {
      * @throws IOException the io exception
      */
     static void initializeFiles(String playerName) throws IOException {
-        File workspace = new File("plugins/ServerHandbook/");
-        if (!workspace.exists()) {
-            workspace.mkdir();
+        File workspace = new File(FILES_PATH);
+
+        if (!(!workspace.exists() && workspace.mkdir())) {
+            // Logger.getAnonymousLogger().warning("Errore creazione cartella workspace")
         }
 
-        new File("plugins/ServerHandbook/" + playerName + ".dxl").createNewFile();
-        new File(ACTIVITY_FILE).createNewFile();
+        if (!new File(FILES_PATH + playerName + ".dxl").createNewFile()) {
+            // Logger.getAnonymousLogger().warning("Errore creazione file utente")
+        }
+
+        if (!new File(ACTIVITY_FILE).createNewFile()) {
+            // Logger.getAnonymousLogger().warning("Errore creazione file attività")
+        }
+
     }
 }

@@ -7,7 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static it.pixel.serverhandbook.service.BaseService.getDimensionName;
 import static it.pixel.serverhandbook.service.BaseService.getEnvironmentFormDimension;
@@ -19,31 +21,6 @@ import static it.pixel.serverhandbook.service.TextManager.*;
  * The type Coords utils.
  */
 public interface CoordsUtils {
-
-    /**
-     * The constant PARAM_ADD.
-     */
-    String PARAM_ADD = "add";
-
-    /**
-     * The constant PARAM_SHOW.
-     */
-    String PARAM_SHOW = "show";
-
-    /**
-     * The constant PARAM_SEARCH.
-     */
-    String PARAM_SEARCH = "find";
-
-    /**
-     * The constant PARAM_SHOW_TO.
-     */
-    String PARAM_SHARE = "share";
-
-    /**
-     * The constant PARAM_DEL.
-     */
-    String PARAM_DEL = "del";
 
 
     /**
@@ -78,7 +55,7 @@ public interface CoordsUtils {
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.isDeleted())
+                .filter(c -> !c.deleted())
                 .toList();
     }
 
@@ -125,7 +102,8 @@ public interface CoordsUtils {
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.isDeleted() && c.getDescription().contains(searchKey))
+                .filter(c -> !c.deleted())
+                .filter(c -> c.description().toLowerCase().contains(searchKey.toLowerCase()))
                 .toList();
     }
 
@@ -142,7 +120,8 @@ public interface CoordsUtils {
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.isDeleted() && id.equals(c.getId()))
+                .filter(c -> !c.deleted())
+                .filter(c -> id.equals(c.id()))
                 .toList();
     }
 
@@ -155,13 +134,22 @@ public interface CoordsUtils {
      * @throws Exception the exception
      */
     static void deleteCoordsByIdAndPlayer(Player player, Long id) throws Exception {
-        List<Coordinate> allCoordsByPlayer = findAllCoordsByPlayer(player);
-        new File(BaseService.getFileName(player)).delete();
-        allCoordsByPlayer.forEach(x -> {
-            if (id.equals(x.getId()) && !x.isDeleted()) {
-                x.setDeleted(true);
+        List<Coordinate> allCoordsByPlayer = new ArrayList<>(findAllCoordsByPlayer(player));
+        if (!new File(BaseService.getFileName(player)).delete()) {
+            Logger.getAnonymousLogger().warning("Errore eliminazione file utente");
+
+        }
+
+        for (int i = 0; i < allCoordsByPlayer.size(); i++) {
+            if (id.equals(allCoordsByPlayer.get(i).id()) && !allCoordsByPlayer.get(i).deleted()) {
+                allCoordsByPlayer.set(i, new Coordinate(
+                        allCoordsByPlayer.get(i).id(), allCoordsByPlayer.get(i)
+                        .playerName(), allCoordsByPlayer.get(i).dimension(), allCoordsByPlayer.get(i).xyz(),
+                        allCoordsByPlayer.get(i).description(), true));
             }
-        });
+        }
+
+
         writeFile(BaseService.getFileName(player), allCoordsByPlayer);
     }
 
@@ -173,9 +161,9 @@ public interface CoordsUtils {
      * @return the string
      */
     static String prepareCoordinateString(Coordinate c) {
-        String dimension = textColorByDimension(getEnvironmentFormDimension(c.getDimension()), getDimensionName(getEnvironmentFormDimension(c.getDimension())));
-        String coords = textColorByDimension(getEnvironmentFormDimension(c.getDimension()), getCoordsAsString(c.getXyz()));
-        String desc = textDescription(c.getDescription());
-        return textWhite("[" + c.getId() + "] ") + dimension + textInfo(" • ") + coords + textInfo(" → ") + desc;
+        String dimension = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getDimensionName(getEnvironmentFormDimension(c.dimension())));
+        String coords = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getCoordsAsString(c.xyz()));
+        String desc = textDescription(c.description());
+        return textWhite("[" + c.id() + "] ") + dimension + textInfo(" • ") + coords + textInfo(" → ") + desc;
     }
 }

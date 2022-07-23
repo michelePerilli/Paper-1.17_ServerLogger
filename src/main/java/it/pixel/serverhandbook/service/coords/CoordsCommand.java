@@ -2,6 +2,7 @@ package it.pixel.serverhandbook.service.coords;
 
 import it.pixel.serverhandbook.model.Coordinate;
 import it.pixel.serverhandbook.service.BaseService;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -10,8 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
-import static it.pixel.serverhandbook.service.BaseService.getParameters;
-import static it.pixel.serverhandbook.service.BaseService.sendMessage;
+import static it.pixel.serverhandbook.service.BaseService.*;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
@@ -20,6 +20,26 @@ import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
  * The type Coords service.
  */
 public interface CoordsCommand {
+
+
+    @Getter
+    enum CoordsParams {
+        ADD("add"), SHOW("show"), FIND("find"), SHARE("share"), DEL("del");
+        private final String param;
+
+        CoordsParams(String param) {
+            this.param = param;
+        }
+
+
+        public static CoordsParams parseParam(String value) {
+            try {
+                return CoordsParams.valueOf(value.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return CoordsParams.SHOW;
+            }
+        }
+    }
 
     /**
      * Add new coords log
@@ -34,7 +54,13 @@ public interface CoordsCommand {
 
         String description = String.join(" ", getParameters(arguments));
 
-        Coordinate coord = new Coordinate(getNextId(player), player.getName(), BaseService.getPlayerDimension(player), getPlayerPosition(player), description, false);
+        Coordinate coord = new Coordinate(
+                getNextId(player),
+                player.getName(),
+                getPlayerDimension(player),
+                getPlayerPosition(player),
+                description,
+                false);
         writeLine(BaseService.getFileName(player), coord);
 
         sendMessage(player, Arrays.asList(textInfo("Coordinate salvate con successo"), "", prepareCoordinateString(coord)));
