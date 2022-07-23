@@ -1,6 +1,5 @@
 package it.pixel.serverhandbook.listener;
 
-import it.pixel.serverhandbook.service.activity.ActivityCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,6 +7,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.IOException;
+
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.trackActivity;
 
 /**
  * The type Player activity listener.
@@ -23,7 +24,7 @@ public class PlayerActivityListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
-        ActivityCommand.trackActivity(player.getName(), true);
+        trackActivity(player.getName(), true);
     }
 
     /**
@@ -35,7 +36,7 @@ public class PlayerActivityListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) throws IOException {
         Player player = event.getPlayer();
-        ActivityCommand.trackActivity(player.getName(), false);
+        trackActivity(player.getName(), false);
     }
 
 

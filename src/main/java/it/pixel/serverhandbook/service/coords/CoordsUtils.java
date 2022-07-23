@@ -9,38 +9,40 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.List;
 
+import static it.pixel.serverhandbook.service.BaseService.getDimensionName;
+import static it.pixel.serverhandbook.service.BaseService.getEnvironmentFormDimension;
 import static it.pixel.serverhandbook.service.FileManager.readFile;
 import static it.pixel.serverhandbook.service.TextManager.*;
 
 /**
  * The type Coords utils.
  */
-public abstract class CoordsUtils extends BaseService {
+public interface CoordsUtils {
 
     /**
      * The constant PARAM_ADD.
      */
-    public static final String PARAM_ADD = "add";
+    String PARAM_ADD = "add";
 
     /**
      * The constant PARAM_SHOW.
      */
-    public static final String PARAM_SHOW = "show";
+    String PARAM_SHOW = "show";
 
     /**
      * The constant PARAM_SEARCH.
      */
-    public static final String PARAM_SEARCH = "find";
+    String PARAM_SEARCH = "find";
 
     /**
      * The constant PARAM_SHOW_TO.
      */
-    public static final String PARAM_SHARE = "share";
+    String PARAM_SHARE = "share";
 
     /**
      * The constant PARAM_DEL.
      */
-    public static final String PARAM_DEL = "del";
+    String PARAM_DEL = "del";
 
 
     /**
@@ -49,7 +51,7 @@ public abstract class CoordsUtils extends BaseService {
      * @param xyz the xyz
      * @return the coords as string
      */
-    public static String getCoordsAsString(Vector3i xyz) {
+    static String getCoordsAsString(Vector3i xyz) {
         return String.format("%s %s %s", xyz.x(), xyz.y(), xyz.z());
     }
 
@@ -59,7 +61,7 @@ public abstract class CoordsUtils extends BaseService {
      * @param xyz the xyz
      * @return the coords as string
      */
-    public static String getCoordsAsString(Location xyz) {
+    static String getCoordsAsString(Location xyz) {
         return String.format("%s %s %s", xyz.getBlockX(), xyz.getBlockY(), xyz.getBlockZ());
     }
 
@@ -71,11 +73,11 @@ public abstract class CoordsUtils extends BaseService {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayer(Player player) throws Exception {
+    static List<Coordinate> findAllCoordsByPlayer(Player player) throws Exception {
 
-        return readFile(getFileName(player))
+        return readFile(BaseService.getFileName(player))
                 .stream()
-                .map(s -> (Coordinate) s)
+                .map(Coordinate.class::cast)
                 .filter(c -> !c.deleted())
                 .toList();
     }
@@ -88,10 +90,10 @@ public abstract class CoordsUtils extends BaseService {
      * @return the next id
      * @throws Exception the exception
      */
-    protected static long getNextId(Player player) throws Exception {
-        return readFile(getFileName(player))
+    static long getNextId(Player player) throws Exception {
+        return readFile(BaseService.getFileName(player))
                 .stream()
-                .map(s -> (Coordinate) s)
+                .map(Coordinate.class::cast)
                 .filter(c -> !c.deleted())
                 .toList().size();
     }
@@ -106,12 +108,21 @@ public abstract class CoordsUtils extends BaseService {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    protected static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws Exception {
+    static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws Exception {
 
-        return readFile(getFileName(player))
+        return readFile(BaseService.getFileName(player))
                 .stream()
-                .map(s -> (Coordinate) s)
+                .map(Coordinate.class::cast)
                 .filter(c -> !c.deleted() && c.description().contains(searchKey))
+                .toList();
+    }
+
+    static List<Coordinate> findAllCoordsByPlayerAndId(Player player, String id) throws Exception {
+
+        return readFile(BaseService.getFileName(player))
+                .stream()
+                .map(Coordinate.class::cast)
+                .filter(c -> !c.deleted() && Long.parseLong(id) == c.id())
                 .toList();
     }
 
@@ -122,7 +133,7 @@ public abstract class CoordsUtils extends BaseService {
      * @param c the c
      * @return the string
      */
-    public static String prepareCoordinateString(Coordinate c) {
+    static String prepareCoordinateString(Coordinate c) {
         String dimension = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getDimensionName(getEnvironmentFormDimension(c.dimension())));
         String coords = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getCoordsAsString(c.xyz()));
         String desc = textDescription(c.description());

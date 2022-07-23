@@ -15,7 +15,7 @@ import static org.bukkit.World.Environment.*;
 /**
  * The type Base service.
  */
-public abstract class BaseService {
+public interface BaseService {
 
     public static final String FILES_PATH = "plugins/ServerHandbook/";
 
@@ -26,21 +26,21 @@ public abstract class BaseService {
         END
     }
 
-    protected static String getFileName(Player player) {
+    static String getFileName(Player player) {
         return FILES_PATH + player.getName() + ".dxl";
     }
 
     /**
      * Date format
      */
-    protected static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
     /**
      * get current date and time
      *
      * @return current date
      */
-    public static String getCurrentDate() {
+    static String getCurrentDate() {
         SimpleDateFormat date = new SimpleDateFormat(DATE_FORMAT);
         TimeZone timeZone = TimeZone.getTimeZone("Europe/Rome");
         Calendar calendar = Calendar.getInstance();
@@ -58,7 +58,7 @@ public abstract class BaseService {
      * @param dimension the dimension
      * @return the world . environment
      */
-    protected static World.Environment getEnvironmentFormDimension(Dimension dimension) {
+    static World.Environment getEnvironmentFormDimension(Dimension dimension) {
         switch (dimension) {
             case OVERWORLD -> {
                 return NORMAL;
@@ -79,7 +79,7 @@ public abstract class BaseService {
      * @param player the player
      * @return the world . environment
      */
-    protected static Dimension getPlayerDimension(Player player) {
+    static Dimension getPlayerDimension(Player player) {
         switch (player.getWorld().getEnvironment()) {
             case NORMAL -> {
                 return Dimension.OVERWORLD;
@@ -100,7 +100,7 @@ public abstract class BaseService {
      * @param env the env
      * @return the dimension name
      */
-    protected static String getDimensionName(World.Environment env) {
+    static String getDimensionName(World.Environment env) {
         switch (env) {
             case NETHER -> {
                 return "Nether";
@@ -122,7 +122,7 @@ public abstract class BaseService {
      * @param arguments the arguments
      * @return the list
      */
-    protected static List<String> getParameters(String[] arguments) {
+    static List<String> getParameters(String[] arguments) {
         List<String> params = new ArrayList<>(Arrays.asList(arguments));
         params.remove(0);
         return params;
@@ -135,7 +135,7 @@ public abstract class BaseService {
      * @param target the target
      * @param header the header
      */
-    protected static void sendMessage(Player target, String header) {
+    static void sendMessage(Player target, String header) {
         target.sendMessage(" ");
         target.sendMessage(header);
         target.sendMessage(" ");
@@ -147,7 +147,7 @@ public abstract class BaseService {
      * @param target the target
      * @param rows   the rows
      */
-    protected static void sendMessage(Player target, String header, List<String> rows) {
+    static void sendMessage(Player target, String header, List<String> rows) {
         target.sendMessage(" ");
         target.sendMessage(header);
         rows.forEach(target::sendMessage);
@@ -161,7 +161,7 @@ public abstract class BaseService {
      * @param target the target
      * @param rows   the rows
      */
-    protected static void sendMessage(Player target, List<String> rows) {
+    static void sendMessage(Player target, List<String> rows) {
         target.sendMessage(" ");
         rows.forEach(target::sendMessage);
         target.sendMessage(" ");
@@ -173,7 +173,7 @@ public abstract class BaseService {
      *
      * @throws IOException the io exception
      */
-    public static void initializeFiles(String playerName) throws IOException {
+    static void initializeFiles(String playerName) throws IOException {
         File workspace = new File("plugins/ServerHandbook/");
         if (!workspace.exists()) {
             workspace.mkdir();

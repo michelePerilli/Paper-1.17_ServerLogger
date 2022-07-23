@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static it.pixel.serverhandbook.service.BaseService.*;
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.*;
+
 /**
  * The type Logging service.
  */
-public class ActivityCommand extends ActivityUtils {
+public interface ActivityCommand {
 
     /**
      * Show server log list
@@ -20,7 +23,7 @@ public class ActivityCommand extends ActivityUtils {
      * @param player player
      * @throws Exception the exception
      */
-    public static void show(Player player) throws Exception {
+    static void show(Player player) throws Exception {
         sendMessage(player, getAllActivities().stream().map(ActivityUtils::prepareActivityString).toList());
     }
 
@@ -32,7 +35,7 @@ public class ActivityCommand extends ActivityUtils {
      * @param args   the args
      * @throws Exception the exception
      */
-    public static void find(Player player, String[] args) throws Exception {
+    static void find(Player player, String[] args) throws Exception {
         if (args.length <= 1)
             return;
         String searchKey = String.join(" ", getParameters(args));
@@ -45,7 +48,7 @@ public class ActivityCommand extends ActivityUtils {
      *
      * @throws Exception the exception
      */
-    public static void stats(Player player) throws Exception {
+    static void stats(Player player) throws Exception {
 
         List<Points> userTime = new ArrayList<>();
 
@@ -88,7 +91,7 @@ public class ActivityCommand extends ActivityUtils {
         sendMessage(player, toPrint);
     }
 
-    private record Points(String player, Long time) implements Comparable<Points> {
+    record Points(String player, Long time) implements Comparable<Points> {
         @Override
         public int compareTo(@NotNull ActivityCommand.Points o) {
             return this.time.compareTo(o.time()) * -1;

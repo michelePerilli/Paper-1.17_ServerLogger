@@ -4,12 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileManager {
+public interface FileManager {
 
     /**
      * The type Append object output stream.
      */
-    private static class AppendObjectOutputStream extends ObjectOutputStream {
+    class AppendObjectOutputStream extends ObjectOutputStream {
 
         /**
          * Instantiates a new Append object output stream.
@@ -78,7 +78,7 @@ public class FileManager {
      * @param obj  the line to log to file
      * @throws IOException the io exception
      */
-    public static void writeLine(String file, Object obj) throws IOException {
+    static void writeLine(String file, Object obj) throws IOException {
         ObjectOutputStream writer = getFileWriter(file);
         writer.writeObject(obj);
         writer.close();
@@ -92,7 +92,7 @@ public class FileManager {
      * @throws ClassNotFoundException the class not found exception
      * @throws IOException            the io exception
      */
-    public static List<Object> readFile(String filename) throws Exception {
+    static List<Object> readFile(String filename) throws Exception {
         if (!isFirstTime(filename)) {
             ObjectInputStream reader = getFileReader(filename);
             List<Object> objects = new ArrayList<>();

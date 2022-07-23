@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static it.pixel.serverhandbook.ServerHandbook.*;
+import static it.pixel.serverhandbook.service.BaseService.initializeFiles;
 import static it.pixel.serverhandbook.service.TextManager.customText;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 

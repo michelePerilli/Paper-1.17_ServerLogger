@@ -1,6 +1,7 @@
 package it.pixel.serverhandbook.service.coords;
 
 import it.pixel.serverhandbook.model.Coordinate;
+import it.pixel.serverhandbook.service.BaseService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -8,14 +9,17 @@ import java.io.IOException;
 import java.util.List;
 
 import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
+import static it.pixel.serverhandbook.service.BaseService.getParameters;
+import static it.pixel.serverhandbook.service.BaseService.sendMessage;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.textInfo;
 import static it.pixel.serverhandbook.service.TextManager.textName;
+import static it.pixel.serverhandbook.service.coords.CoordsUtils.findAllCoordsByPlayerAndDescription;
 
 /**
  * The type Coords service.
  */
-public class CoordsCommand extends CoordsUtils {
+public interface CoordsCommand {
 
     /**
      * Add new coords log
@@ -24,13 +28,13 @@ public class CoordsCommand extends CoordsUtils {
      * @param arguments description
      * @throws IOException the io exception
      */
-    public static void add(Player player, String[] arguments) throws Exception {
+    static void add(Player player, String[] arguments) throws Exception {
         if (arguments.length <= 1)
             return;
 
         String description = String.join(" ", getParameters(arguments));
 
-        writeLine(getFileName(player), new Coordinate(getNextId(player), player.getName(), getPlayerDimension(player), getPlayerPosition(player), description, false));
+        writeLine(BaseService.getFileName(player), new Coordinate(CoordsUtils.getNextId(player), player.getName(), BaseService.getPlayerDimension(player), getPlayerPosition(player), description, false));
 
         sendMessage(player, textInfo("Coordinate salvate con successo"));
     }
@@ -42,8 +46,8 @@ public class CoordsCommand extends CoordsUtils {
      * @param player player
      * @throws IOException the io exception
      */
-    public static void show(Player player) throws Exception {
-        List<Coordinate> coords = findAllCoordsByPlayer(player);
+    static void show(Player player) throws Exception {
+        List<Coordinate> coords = CoordsUtils.findAllCoordsByPlayer(player);
 
         if (coords.isEmpty()) {
             sendMessage(player, textInfo("Non hai ancora coordinate salvate. Usa /coords add <descrizione> per aggiungerne una."));
@@ -62,7 +66,7 @@ public class CoordsCommand extends CoordsUtils {
      * @param arguments the arguments
      * @throws IOException the io exception
      */
-    public static void search(Player player, String[] arguments) throws Exception {
+    static void search(Player player, String[] arguments) throws Exception {
         String searchKey = String.join(" ", getParameters(arguments));
 
         List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
@@ -84,7 +88,7 @@ public class CoordsCommand extends CoordsUtils {
      * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public static void share(Player player, String[] arguments) throws Exception {
+    static void share(Player player, String[] arguments) throws Exception {
 
         List<String> parameters = getParameters(arguments);
 
@@ -114,7 +118,7 @@ public class CoordsCommand extends CoordsUtils {
     }
 
     // coming soon
-    public static void del(Player player, String[] args) throws Exception {
+    static void del(Player player, String[] args) throws Exception {
         String searchKey = String.join(" ", getParameters(args));
 
         List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
