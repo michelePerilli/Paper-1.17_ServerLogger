@@ -6,12 +6,13 @@ import it.pixel.serverhandbook.service.BaseService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
 import static it.pixel.serverhandbook.service.BaseService.getDimensionName;
 import static it.pixel.serverhandbook.service.BaseService.getEnvironmentFormDimension;
 import static it.pixel.serverhandbook.service.FileManager.readFile;
+import static it.pixel.serverhandbook.service.FileManager.writeFile;
 import static it.pixel.serverhandbook.service.TextManager.*;
 
 /**
@@ -70,18 +71,31 @@ public interface CoordsUtils {
      *
      * @param player the player
      * @return the all coords by player
-     * @throws IOException            the io exception
-     * @throws ClassNotFoundException the class not found exception
+     * @throws Exception the exception
+     */
+    static List<Coordinate> findAllUndeletedCoordsByPlayer(Player player) throws Exception {
+
+        return readFile(BaseService.getFileName(player))
+                .stream()
+                .map(Coordinate.class::cast)
+                .filter(c -> !c.isDeleted())
+                .toList();
+    }
+
+    /**
+     * Find all coords by player list.
+     *
+     * @param player the player
+     * @return the list
+     * @throws Exception the exception
      */
     static List<Coordinate> findAllCoordsByPlayer(Player player) throws Exception {
 
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.deleted())
                 .toList();
     }
-
 
     /**
      * Gets next id.
@@ -94,7 +108,6 @@ public interface CoordsUtils {
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.deleted())
                 .toList().size();
     }
 
@@ -105,25 +118,51 @@ public interface CoordsUtils {
      * @param player    the player
      * @param searchKey the search key
      * @return the list
-     * @throws IOException            the io exception
-     * @throws ClassNotFoundException the class not found exception
+     * @throws Exception the exception
      */
     static List<Coordinate> findAllCoordsByPlayerAndDescription(Player player, String searchKey) throws Exception {
 
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.deleted() && c.description().contains(searchKey))
+                .filter(c -> !c.isDeleted() && c.getDescription().contains(searchKey))
                 .toList();
     }
 
-    static List<Coordinate> findAllCoordsByPlayerAndId(Player player, String id) throws Exception {
+    /**
+     * Find all coords by player and id list.
+     *
+     * @param player the player
+     * @param id     the id
+     * @return the list
+     * @throws Exception the exception
+     */
+    static List<Coordinate> findAllCoordsByPlayerAndId(Player player, Long id) throws Exception {
 
         return readFile(BaseService.getFileName(player))
                 .stream()
                 .map(Coordinate.class::cast)
-                .filter(c -> !c.deleted() && Long.parseLong(id) == c.id())
+                .filter(c -> !c.isDeleted() && id.equals(c.getId()))
                 .toList();
+    }
+
+
+    /**
+     * Delete coords by id and player.
+     *
+     * @param player the player
+     * @param id     the id
+     * @throws Exception the exception
+     */
+    static void deleteCoordsByIdAndPlayer(Player player, Long id) throws Exception {
+        List<Coordinate> allCoordsByPlayer = findAllCoordsByPlayer(player);
+        new File(BaseService.getFileName(player)).delete();
+        allCoordsByPlayer.forEach(x -> {
+            if (id.equals(x.getId()) && !x.isDeleted()) {
+                x.setDeleted(true);
+            }
+        });
+        writeFile(BaseService.getFileName(player), allCoordsByPlayer);
     }
 
 
@@ -134,9 +173,9 @@ public interface CoordsUtils {
      * @return the string
      */
     static String prepareCoordinateString(Coordinate c) {
-        String dimension = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getDimensionName(getEnvironmentFormDimension(c.dimension())));
-        String coords = textColorByDimension(getEnvironmentFormDimension(c.dimension()), getCoordsAsString(c.xyz()));
-        String desc = textDescription(c.description());
-        return dimension + textInfo(" • ") + coords + textInfo(" → ") + desc;
+        String dimension = textColorByDimension(getEnvironmentFormDimension(c.getDimension()), getDimensionName(getEnvironmentFormDimension(c.getDimension())));
+        String coords = textColorByDimension(getEnvironmentFormDimension(c.getDimension()), getCoordsAsString(c.getXyz()));
+        String desc = textDescription(c.getDescription());
+        return textWhite("[" + c.getId() + "] ") + dimension + textInfo(" • ") + coords + textInfo(" → ") + desc;
     }
 }

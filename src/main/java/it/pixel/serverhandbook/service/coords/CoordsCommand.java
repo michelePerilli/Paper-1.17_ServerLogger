@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
@@ -14,7 +15,7 @@ import static it.pixel.serverhandbook.service.BaseService.sendMessage;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.textInfo;
 import static it.pixel.serverhandbook.service.TextManager.textName;
-import static it.pixel.serverhandbook.service.coords.CoordsUtils.findAllCoordsByPlayerAndDescription;
+import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
  * The type Coords service.
@@ -34,9 +35,10 @@ public interface CoordsCommand {
 
         String description = String.join(" ", getParameters(arguments));
 
-        writeLine(BaseService.getFileName(player), new Coordinate(CoordsUtils.getNextId(player), player.getName(), BaseService.getPlayerDimension(player), getPlayerPosition(player), description, false));
+        Coordinate coord = new Coordinate(getNextId(player), player.getName(), BaseService.getPlayerDimension(player), getPlayerPosition(player), description, false);
+        writeLine(BaseService.getFileName(player), coord);
 
-        sendMessage(player, textInfo("Coordinate salvate con successo"));
+        sendMessage(player, Arrays.asList(textInfo("Coordinate salvate con successo"), "", prepareCoordinateString(coord)));
     }
 
 
@@ -47,7 +49,7 @@ public interface CoordsCommand {
      * @throws IOException the io exception
      */
     static void show(Player player) throws Exception {
-        List<Coordinate> coords = CoordsUtils.findAllCoordsByPlayer(player);
+        List<Coordinate> coords = CoordsUtils.findAllUndeletedCoordsByPlayer(player);
 
         if (coords.isEmpty()) {
             sendMessage(player, textInfo("Non hai ancora coordinate salvate. Usa /coords add <descrizione> per aggiungerne una."));
@@ -117,16 +119,24 @@ public interface CoordsCommand {
         }
     }
 
-    // coming soon
+
     static void del(Player player, String[] args) throws Exception {
+        if (args.length > 2) {
+            player.sendMessage(textInfo("Che stai a fa?"));
+            return;
+        }
         String searchKey = String.join(" ", getParameters(args));
 
-        List<Coordinate> coords = findAllCoordsByPlayerAndDescription(player, searchKey);
-
+        List<Coordinate> coords = findAllCoordsByPlayerAndId(player, Long.valueOf(searchKey));
         if (coords.isEmpty()) {
             sendMessage(player, textInfo("Nessun dato da eliminare."));
         } else {
-            sendMessage(player, textInfo("Coming soon..."));
+            deleteCoordsByIdAndPlayer(player, Long.valueOf(searchKey));
+            sendMessage(player, List.of(
+                    textInfo("Coordinata eliminata.")/*,
+                    coming soon..
+                    textInfo("Usa ") + textWhite("/coords restore " + searchKey) + textInfo(" per annullare."),
+                    textInfo("Usa ") + textWhite("/coords clear") + textInfo(" per eliminare definitivamente.")*/));
         }
 
 

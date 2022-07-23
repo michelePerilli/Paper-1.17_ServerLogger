@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface File manager.
+ */
 public interface FileManager {
 
     /**
@@ -71,6 +74,7 @@ public interface FileManager {
         }
     }
 
+
     /**
      * Save to log file the line
      *
@@ -85,12 +89,25 @@ public interface FileManager {
     }
 
     /**
+     * Write file.
+     *
+     * @param <T>  the type parameter
+     * @param file the file
+     * @param obj  the obj
+     * @throws IOException the io exception
+     */
+    static <T> void writeFile(String file, List<T> obj) throws IOException {
+        for (T x : obj) {
+            writeLine(file, x);
+        }
+    }
+
+    /**
      * Read file list.
      *
      * @param filename the filename
      * @return the list
-     * @throws ClassNotFoundException the class not found exception
-     * @throws IOException            the io exception
+     * @throws Exception the exception
      */
     static List<Object> readFile(String filename) throws Exception {
         if (!isFirstTime(filename)) {

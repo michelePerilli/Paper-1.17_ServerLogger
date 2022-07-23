@@ -25,6 +25,14 @@ public interface ActivityUtils {
     String ACTIVITY_FILE = "plugins/ServerHandbook/activity.dxl";
 
     /**
+     * The constant PARAM_REPORT.
+     */
+    String PARAM_REPORT = "report";
+    /**
+     * The constant PARAM_FIND.
+     */
+    String PARAM_FIND = "find";
+    /**
      * The constant JOINED.
      */
     String JOINED = "joined the game";
@@ -51,7 +59,7 @@ public interface ActivityUtils {
      * Gets all activities.
      *
      * @return the all activities
-     * @throws IOException the io exception
+     * @throws Exception the exception
      */
     static List<PlayerActivity> getAllActivities() throws Exception {
         return readFile(ACTIVITY_FILE).stream().map(PlayerActivity.class::cast).filter(c -> !c.deleted()).toList();
@@ -61,8 +69,9 @@ public interface ActivityUtils {
     /**
      * Gets all activities.
      *
+     * @param playerName the player name
      * @return the all activities
-     * @throws IOException the io exception
+     * @throws Exception the exception
      */
     static List<PlayerActivity> getAllActivitiesByPlayer(String playerName) throws Exception {
         return readFile(ACTIVITY_FILE).stream().map(PlayerActivity.class::cast).filter(c -> !c.deleted() && c.playerName().contains(playerName)).toList();
@@ -81,15 +90,35 @@ public interface ActivityUtils {
         return date + " " + name + " " + act;
     }
 
+    /**
+     * Prepare activity report string string.
+     *
+     * @param playerName the player name
+     * @param time       the time
+     * @return the string
+     */
     static String prepareActivityReportString(String playerName, Long time) {
         return textInfo(toTime(time)) + textInfo(" → ") + textName(playerName);
     }
 
+    /**
+     * Prepare activity report string gold string.
+     *
+     * @param playerName the player name
+     * @param time       the time
+     * @return the string
+     */
     static String prepareActivityReportStringGold(String playerName, Long time) {
         return textInfo(toTime(time)) + textInfo(" → ") + textNameGold(playerName);
     }
 
 
+    /**
+     * Simple string to date long.
+     *
+     * @param myDate the my date
+     * @return the long
+     */
     static Long simpleStringToDate(String myDate) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         Date date = null;
@@ -101,6 +130,12 @@ public interface ActivityUtils {
         return date.getTime();
     }
 
+    /**
+     * To time string.
+     *
+     * @param milliseconds the milliseconds
+     * @return the string
+     */
     static String toTime(Long milliseconds) {
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);

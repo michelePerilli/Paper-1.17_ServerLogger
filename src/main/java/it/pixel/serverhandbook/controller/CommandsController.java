@@ -15,6 +15,8 @@ import java.io.IOException;
 import static it.pixel.serverhandbook.ServerHandbook.*;
 import static it.pixel.serverhandbook.service.BaseService.initializeFiles;
 import static it.pixel.serverhandbook.service.TextManager.customText;
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.PARAM_FIND;
+import static it.pixel.serverhandbook.service.activity.ActivityUtils.PARAM_REPORT;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
@@ -64,8 +66,8 @@ public class CommandsController implements CommandExecutor {
                     if (args.length < 1)
                         args = new String[]{PARAM_SHOW};
                     switch (args[0]) {
-//                        case "find" -> ActivityCommand.find(player, args);
-                        case "report" -> ActivityCommand.stats(player);
+                        case PARAM_FIND -> ActivityCommand.find(player, args);
+                        case PARAM_REPORT -> ActivityCommand.stats(player);
                         default -> ActivityCommand.show(player);
                     }
                 }

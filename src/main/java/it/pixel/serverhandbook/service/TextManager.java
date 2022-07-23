@@ -6,6 +6,9 @@ import org.bukkit.World;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * The interface Text manager.
+ */
 public interface TextManager {
 
     /**
@@ -17,9 +20,18 @@ public interface TextManager {
      */
     static String textColorByDimension(World.Environment env, String msg) {
         switch (env) {
-            case NETHER -> customText(msg, ChatColor.DARK_RED, ChatColor.BOLD);
-            case THE_END -> customText(msg, ChatColor.DARK_GRAY, ChatColor.BOLD);
-            case NORMAL -> customText(msg, ChatColor.DARK_GREEN, ChatColor.BOLD);
+            case NETHER -> {
+                return customText(msg, ChatColor.DARK_RED, ChatColor.BOLD);
+            }
+            case THE_END -> {
+                return customText(msg, ChatColor.DARK_GRAY, ChatColor.BOLD);
+            }
+            case NORMAL -> {
+                return customText(msg, ChatColor.DARK_GREEN, ChatColor.BOLD);
+            }
+            case CUSTOM -> {
+                return textWhite("");
+            }
 
         }
         return msg;
@@ -85,5 +97,16 @@ public interface TextManager {
     static String textDescription(String msg) {
         return customText(msg, ChatColor.GOLD);
     }
+
+    /**
+     * Text descrizione string.
+     *
+     * @param msg the msg
+     * @return the string
+     */
+    static String textWhite(String msg) {
+        return customText(msg, ChatColor.WHITE);
+    }
+
 
 }

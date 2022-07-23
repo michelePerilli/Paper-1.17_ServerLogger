@@ -10,17 +10,18 @@ import static it.pixel.serverhandbook.service.TextManager.*;
 /**
  * The type Here command.
  */
-public class HereCommand extends BaseService {
+public interface HereCommand {
 
     /**
      * Show in all chat your current dimension
      *
-     * @param player player
+     * @param player    player
+     * @param arguments the arguments
      */
-    public static void here(Player player, String[] arguments) {
+    static void here(Player player, String[] arguments) {
 
         String nome = textName(player.getName());
-        String dimension = textColorByDimension(player.getWorld().getEnvironment(), getDimensionName(player.getWorld().getEnvironment()));
+        String dimension = textColorByDimension(player.getWorld().getEnvironment(), BaseService.getDimensionName(player.getWorld().getEnvironment()));
         String coords;
 
         if (arguments.length > 0)
