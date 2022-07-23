@@ -55,8 +55,7 @@ public class ServerHandbook extends JavaPlugin {
                 getCommand(CMD_COORDS),
                 getCommand(CMD_ACTIVITY),
                 getCommand(CMD_HERE),
-                getCommand(CMD_BOOK),
-                getCommand("fix")
+                getCommand(CMD_BOOK)
         );
 
         commandList.stream().filter(Objects::nonNull).forEach(cmd -> {

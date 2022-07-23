@@ -13,8 +13,7 @@ import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
 import static it.pixel.serverhandbook.service.BaseService.getParameters;
 import static it.pixel.serverhandbook.service.BaseService.sendMessage;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
-import static it.pixel.serverhandbook.service.TextManager.textInfo;
-import static it.pixel.serverhandbook.service.TextManager.textName;
+import static it.pixel.serverhandbook.service.TextManager.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
 
 /**
@@ -39,6 +38,7 @@ public interface CoordsCommand {
         writeLine(BaseService.getFileName(player), coord);
 
         sendMessage(player, Arrays.asList(textInfo("Coordinate salvate con successo"), "", prepareCoordinateString(coord)));
+
     }
 
 
@@ -49,10 +49,13 @@ public interface CoordsCommand {
      * @throws IOException the io exception
      */
     static void show(Player player) throws Exception {
+
         List<Coordinate> coords = CoordsUtils.findAllUndeletedCoordsByPlayer(player);
 
         if (coords.isEmpty()) {
-            sendMessage(player, textInfo("Non hai ancora coordinate salvate. Usa /coords add <descrizione> per aggiungerne una."));
+            sendMessage(player, List.of(
+                    textInfo("Non hai ancora coordinate salvate."),
+                    textInfo("Usa ") + textWhite("/coords add <descrizione>") + textInfo(" per aggiungerne una")));
             return;
         }
 
