@@ -17,10 +17,10 @@ import static org.bukkit.World.Environment.*;
  */
 public interface BaseService {
 
-    public static final String FILES_PATH = "plugins/ServerHandbook/";
+    String FILES_PATH = "plugins/ServerHandbook/";
 
 
-    public enum Dimension implements Serializable {
+    enum Dimension implements Serializable {
         OVERWORLD,
         NETHER,
         END

@@ -10,8 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static it.pixel.serverhandbook.model.Coordinate.getPlayerPosition;
-import static it.pixel.serverhandbook.service.BaseService.getParameters;
-import static it.pixel.serverhandbook.service.BaseService.sendMessage;
+import static it.pixel.serverhandbook.service.BaseService.*;
 import static it.pixel.serverhandbook.service.FileManager.writeLine;
 import static it.pixel.serverhandbook.service.TextManager.*;
 import static it.pixel.serverhandbook.service.coords.CoordsUtils.*;
@@ -34,7 +33,13 @@ public interface CoordsCommand {
 
         String description = String.join(" ", getParameters(arguments));
 
-        Coordinate coord = new Coordinate(getNextId(player), player.getName(), BaseService.getPlayerDimension(player), getPlayerPosition(player), description, false);
+        Coordinate coord = new Coordinate(
+                getNextId(player),
+                player.getName(),
+                getPlayerDimension(player),
+                getPlayerPosition(player),
+                description,
+                false);
         writeLine(BaseService.getFileName(player), coord);
 
         sendMessage(player, Arrays.asList(textInfo("Coordinate salvate con successo"), "", prepareCoordinateString(coord)));
