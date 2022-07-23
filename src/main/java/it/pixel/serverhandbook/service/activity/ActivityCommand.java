@@ -2,9 +2,9 @@ package it.pixel.serverhandbook.service.activity;
 
 import it.pixel.serverhandbook.model.PlayerActivity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,7 +46,8 @@ public class ActivityCommand extends ActivityUtils {
      * @throws Exception the exception
      */
     public static void stats(Player player) throws Exception {
-        Map<String, Long> userTime = new HashMap<>();
+
+        List<Points> userTime = new ArrayList<>();
 
         Map<String, List<PlayerActivity>> mappa = getAllActivities().stream().collect(Collectors.groupingBy(PlayerActivity::playerName));
 
@@ -77,13 +78,21 @@ public class ActivityCommand extends ActivityUtils {
             if (lastLogIn != null) {
                 time += simpleStringToDate(getCurrentDate()) - lastLogIn;
             }
-            userTime.put(playerName.getKey(), time);
+            userTime.add(new Points(playerName.getKey(), time));
 
         }
+        userTime = userTime.stream().sorted().toList();
 
-        List<String> toPrint = userTime.entrySet().stream().map(x -> prepareActivityReportString(x.getKey(), x.getValue())).toList();
+        List<String> toPrint = new ArrayList<>(userTime.stream().sorted().map(x -> prepareActivityReportString(x.player(), x.time)).toList());
+        toPrint.set(0, prepareActivityReportStringGold(userTime.get(0).player(), userTime.get(0).time()));
         sendMessage(player, toPrint);
     }
 
+    private record Points(String player, Long time) implements Comparable<Points> {
+        @Override
+        public int compareTo(@NotNull ActivityCommand.Points o) {
+            return this.time.compareTo(o.time()) * -1;
+        }
+    }
 
 }

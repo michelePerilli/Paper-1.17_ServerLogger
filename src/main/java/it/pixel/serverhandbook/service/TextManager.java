@@ -6,7 +6,7 @@ import org.bukkit.World;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class TextManager {
+public interface TextManager {
 
     /**
      * Text color by dimension string.
@@ -15,17 +15,12 @@ public class TextManager {
      * @param msg the msg
      * @return the string
      */
-    public static String textColorByDimension(World.Environment env, String msg) {
+    static String textColorByDimension(World.Environment env, String msg) {
         switch (env) {
-            case NETHER -> {
-                return customText(msg, ChatColor.DARK_RED, ChatColor.BOLD);
-            }
-            case THE_END -> {
-                return customText(msg, ChatColor.DARK_GRAY, ChatColor.BOLD);
-            }
-            case NORMAL -> {
-                return customText(msg, ChatColor.DARK_GREEN, ChatColor.BOLD);
-            }
+            case NETHER -> customText(msg, ChatColor.DARK_RED, ChatColor.BOLD);
+            case THE_END -> customText(msg, ChatColor.DARK_GRAY, ChatColor.BOLD);
+            case NORMAL -> customText(msg, ChatColor.DARK_GREEN, ChatColor.BOLD);
+
         }
         return msg;
     }
@@ -37,7 +32,7 @@ public class TextManager {
      * @param chatColors the chat colors
      * @return the string
      */
-    public static String customText(String msg, ChatColor... chatColors) {
+    static String customText(String msg, ChatColor... chatColors) {
         return ChatColor.RESET.toString().concat(Arrays.stream(chatColors).map(ChatColor::toString).collect(Collectors.joining(""))).concat(msg);
     }
 
@@ -47,8 +42,18 @@ public class TextManager {
      * @param name the name
      * @return the string
      */
-    public static String textName(String name) {
+    static String textName(String name) {
         return customText(name, ChatColor.DARK_PURPLE, ChatColor.BOLD);
+    }
+
+    /**
+     * Text name string.
+     *
+     * @param name the name
+     * @return the string
+     */
+    static String textNameGold(String name) {
+        return customText(name, ChatColor.GOLD, ChatColor.BOLD);
     }
 
     /**
@@ -57,7 +62,7 @@ public class TextManager {
      * @param coordinate the coordinate
      * @return the string
      */
-    public static String textCoordinate(String coordinate) {
+    static String textCoordinate(String coordinate) {
         return customText(coordinate, ChatColor.DARK_AQUA, ChatColor.BOLD);
     }
 
@@ -67,7 +72,7 @@ public class TextManager {
      * @param msg the msg
      * @return the string
      */
-    public static String textInfo(String msg) {
+    static String textInfo(String msg) {
         return customText(msg, ChatColor.GRAY);
     }
 
@@ -77,7 +82,7 @@ public class TextManager {
      * @param msg the msg
      * @return the string
      */
-    public static String textDescription(String msg) {
+    static String textDescription(String msg) {
         return customText(msg, ChatColor.GOLD);
     }
 

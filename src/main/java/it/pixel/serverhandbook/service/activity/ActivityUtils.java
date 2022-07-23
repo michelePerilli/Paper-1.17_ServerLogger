@@ -82,7 +82,11 @@ public abstract class ActivityUtils extends BaseService {
     }
 
     protected static String prepareActivityReportString(String playerName, Long time) {
-        return textName(playerName) + textInfo(" → ") + textInfo(toTime(time));
+        return textInfo(toTime(time)) + textInfo(" → ") + textName(playerName);
+    }
+
+    protected static String prepareActivityReportStringGold(String playerName, Long time) {
+        return textInfo(toTime(time)) + textInfo(" → ") + textNameGold(playerName);
     }
 
 
@@ -101,10 +105,13 @@ public abstract class ActivityUtils extends BaseService {
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
+        int days = (int) (milliseconds / (1000 * 60 * 60 * 24));
 
-        return String.format("%02d h, %02d min, %02d sec",
+        return String.format("%3d d, %02d h, %02d min, %02d sec",
+                days,
                 hours,
-                minutes, seconds
+                minutes,
+                seconds
         );
     }
 }
