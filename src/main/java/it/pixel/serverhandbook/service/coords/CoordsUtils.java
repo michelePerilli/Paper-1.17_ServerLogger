@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static it.pixel.serverhandbook.service.BaseService.getDimensionName;
 import static it.pixel.serverhandbook.service.BaseService.getEnvironmentFormDimension;
@@ -157,7 +158,10 @@ public interface CoordsUtils {
      */
     static void deleteCoordsByIdAndPlayer(Player player, Long id) throws Exception {
         List<Coordinate> allCoordsByPlayer = new ArrayList<>(findAllCoordsByPlayer(player));
-        new File(BaseService.getFileName(player)).delete();
+        if (!new File(BaseService.getFileName(player)).delete()) {
+            Logger.getAnonymousLogger().warning("Errore eliminazione file utente");
+
+        }
 
         for (int i = 0; i < allCoordsByPlayer.size(); i++) {
             if (id.equals(allCoordsByPlayer.get(i).id()) && !allCoordsByPlayer.get(i).deleted()) {
