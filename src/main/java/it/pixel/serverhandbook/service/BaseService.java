@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 import static it.pixel.serverhandbook.service.activity.ActivityUtils.ACTIVITY_FILE;
 import static org.bukkit.World.Environment.*;
