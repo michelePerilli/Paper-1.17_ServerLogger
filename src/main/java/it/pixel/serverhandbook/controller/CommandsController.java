@@ -49,7 +49,7 @@ public class CommandsController implements CommandExecutor {
         initializeFiles(player.getName());
 
         //************************* COMMANDs SECTION *************************//
-        switch (Commands.valueOf(command.getName().toUpperCase()))) {
+        switch (Commands.valueOf(command.getName().toUpperCase())) {
             case COORDS -> {
                 if (args.length < 1)
                     args = new String[]{CoordsCommand.CoordsParams.SHOW.getParam()};
